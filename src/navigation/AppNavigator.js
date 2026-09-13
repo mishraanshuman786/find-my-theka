@@ -94,7 +94,17 @@ function LoadingWrapper() {
 export default function AppNavigator() {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) {
+  const [splashFinished, setSplashFinished] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSplashFinished(true);
+    }, 3000); // 3000 milliseconds = 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading || !splashFinished) {
     return <LoadingWrapper />;
   }
 
