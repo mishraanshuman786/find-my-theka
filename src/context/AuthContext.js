@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext,useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authAPI } from '../api/client';
 
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password, phone = '') => {
     try {
       setError(null);
-      console.log("Regstering");
+      console.log("Registering");
       const response = await authAPI.register({ name, email, password, phone });
       console.log("Response:",response);
       
@@ -79,6 +79,23 @@ export const AuthProvider = ({ children }) => {
       return { success: false, error: message };
     }
   };
+
+  const fetchProfile = useCallback(async () => {
+  try {
+    const response = await authAPI.getProfile();
+
+    const userData = response.data.data;
+
+    setUser(userData);
+
+    await AsyncStorage.setItem(
+      "userData",
+      JSON.stringify(userData)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}, []);
 
   const logout = async () => {
     try {
@@ -103,6 +120,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: !!user,
         login,
         register,
+        fetchProfile,
         logout,
         clearError: () => setError(null),
       }}

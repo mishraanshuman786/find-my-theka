@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -6,12 +6,26 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import colors from '../constants/colors';
 
 export default function ProfileScreen() {
-  const { user, logout } = useAuth();
+  const { user,fetchProfile, logout } = useAuth();
+
+
+  useFocusEffect(
+  useCallback(() => {
+    const loadProfile = async () => {
+      await fetchProfile();
+    };
+
+    loadProfile();
+  }, [fetchProfile])
+);
+ 
 
   const handleLogout = () => {
     Alert.alert(
@@ -27,6 +41,8 @@ export default function ProfileScreen() {
       ]
     );
   };
+
+  console.log("New User",user);
 
   return (
     <ScrollView style={styles.container}>

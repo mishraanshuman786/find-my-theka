@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   View,
   Text,
@@ -6,134 +7,280 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  Alert,
 } from 'react-native';
+
 import MapView, { Marker } from 'react-native-maps';
+
 import colors from '../constants/colors';
 
-export default function PlaceDetailScreen({ route, navigation }) {
+export default function PlaceDetailScreen({
+  route,
+  navigation,
+}) {
   const { place } = route.params;
 
+  const latitude = Number(place.location?.lat);
+  const longitude = Number(place.location?.lng);
+
   const formatDistance = (meters) => {
-    if (!meters) return 'N/A';
-    if (meters < 1000) return `${meters} meters`;
+    if (meters === null || meters === undefined) {
+      return 'N/A';
+    }
+
+    if (meters < 1000) {
+      return `${Math.round(meters)} meters`;
+    }
+
     return `${(meters / 1000).toFixed(2)} km`;
   };
 
-  const openInGoogleMaps = () => {
-    const lat = place.location?.lat || '25.4358';
-    const lng = place.location?.lng || '82.8534';
-    const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-    Linking.openURL(url);
-  };
-
-  const openInMappls = () => {
-    if (place.eLoc) {
-      const url = `https://mappls.com/${place.eLoc}`;
-      Linking.openURL(url);
+  const getPlaceType = () => {
+    if (!place.types || place.types.length === 0) {
+      return 'Liquor Shop';
     }
+
+    if (place.types.includes('liquor_store')) {
+      return 'Liquor Shop';
+    }
+
+    return place.types[0]
+      ?.replace(/_/g, ' ')
+      ?.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-  const callShop = () => {
-    // If phone number is available, open dialer
-    Alert?.alert('Call', 'Phone number not available for this shop');
+  const openInGoogleMaps = async () => {
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+      Alert.alert(
+        'Location unavailable',
+        'Location information is not available for this shop.'
+      );
+
+      return;
+    }
+
+    const url =
+      `https://www.google.com/maps/search/?api=1` +
+      `&query=${latitude},${longitude}`;
+
+    try {
+      await Linking.openURL(url);
+    } catch (error) {
+      Alert.alert(
+        'Error',
+        'Unable to open Google Maps.'
+      );
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* Map at top */}
+
+      {/* Map */}
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: parseFloat(place.location?.lat) || 25.4358,
-          longitude: parseFloat(place.location?.lng) || 82.8534,
+          latitude: Number.isFinite(latitude)
+            ? latitude
+            : 25.4358,
+
+          longitude: Number.isFinite(longitude)
+            ? longitude
+            : 82.8534,
+
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
         scrollEnabled={false}
         zoomEnabled={false}
       >
-        <Marker
-          coordinate={{
-            latitude: parseFloat(place.location?.lat) || 25.4358,
-            longitude: parseFloat(place.location?.lng) || 82.8534,
-          }}
-          title={place.name}
-          pinColor={colors.primary}
-        />
+        {Number.isFinite(latitude) &&
+          Number.isFinite(longitude) && (
+            <Marker
+              coordinate={{
+                latitude,
+                longitude,
+              }}
+              title={place.name}
+              description={place.address}
+              pinColor={colors.primary}
+            />
+          )}
       </MapView>
 
-      {/* Details Card */}
+      {/* Details */}
       <View style={styles.detailsCard}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.shopIcon}>🍺</Text>
-            <Text style={styles.name}>{place.name}</Text>
+            <Text style={styles.shopIcon}>
+              🍺
+            </Text>
+
+            <Text style={styles.name}>
+              {place.name}
+            </Text>
           </View>
 
-          {/* Info Cards */}
+          {/* Information */}
           <View style={styles.infoRow}>
+
+            {/* Distance */}
             <View style={styles.infoCard}>
-              <Text style={styles.infoIcon}>📍</Text>
-              <Text style={styles.infoLabel}>Distance</Text>
-              <Text style={styles.infoValue}>{formatDistance(place.distance)}</Text>
+              <Text style={styles.infoIcon}>
+                📍
+              </Text>
+
+              <Text style={styles.infoLabel}>
+                Distance
+              </Text>
+
+              <Text style={styles.infoValue}>
+                {formatDistance(place.distance)}
+              </Text>
             </View>
+
+            {/* Type */}
             <View style={styles.infoCard}>
-              <Text style={styles.infoIcon}>🏷️</Text>
-              <Text style={styles.infoLabel}>Type</Text>
-              <Text style={styles.infoValue}>{place.type || 'POI'}</Text>
+              <Text style={styles.infoIcon}>
+                🏷️
+              </Text>
+
+              <Text style={styles.infoLabel}>
+                Type
+              </Text>
+
+              <Text style={styles.infoValue}>
+                {getPlaceType()}
+              </Text>
             </View>
           </View>
 
-          {place.eLoc && (
-            <View style={styles.infoCardFull}>
-              <Text style={styles.infoIcon}>🗺️</Text>
-              <Text style={styles.infoLabel}>Mappls eLoc</Text>
-              <Text style={styles.infoValue}>{place.eLoc}</Text>
+          {/* Rating + Status */}
+          <View style={styles.infoRow}>
+
+            <View style={styles.infoCard}>
+              <Text style={styles.infoIcon}>
+                ⭐
+              </Text>
+
+              <Text style={styles.infoLabel}>
+                Rating
+              </Text>
+
+              <Text style={styles.infoValue}>
+                {place.rating !== null &&
+                place.rating !== undefined
+                  ? place.rating
+                  : 'N/A'}
+              </Text>
             </View>
-          )}
+
+            <View style={styles.infoCard}>
+              <Text style={styles.infoIcon}>
+                🟢
+              </Text>
+
+              <Text style={styles.infoLabel}>
+                Status
+              </Text>
+
+              <Text
+                style={[
+                  styles.infoValue,
+                  place.isOpen === true
+                    ? styles.openText
+                    : place.isOpen === false
+                    ? styles.closedText
+                    : null,
+                ]}
+              >
+                {place.isOpen === true
+                  ? 'Open'
+                  : place.isOpen === false
+                  ? 'Closed'
+                  : 'Unknown'}
+              </Text>
+            </View>
+
+          </View>
 
           {/* Address */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>📍 Address</Text>
-            <Text style={styles.address}>{place.address}</Text>
+            <Text style={styles.sectionTitle}>
+              📍 Address
+            </Text>
+
+            <Text style={styles.address}>
+              {place.address || 'Address unavailable'}
+            </Text>
           </View>
 
-          {/* Keywords */}
-          {place.keywords && place.keywords.length > 0 && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>🏷️ Keywords</Text>
-              <View style={styles.keywordsContainer}>
-                {place.keywords.map((kw, index) => (
-                  <View key={index} style={styles.keywordBadge}>
-                    <Text style={styles.keywordText}>{kw}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          )}
+          {/* Types */}
+          {place.types &&
+            place.types.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>
+                  🏷️ Categories
+                </Text>
 
-          {/* Action Buttons */}
+                <View style={styles.keywordsContainer}>
+                  {place.types.map((type, index) => (
+                    <View
+                      key={`${type}-${index}`}
+                      style={styles.keywordBadge}
+                    >
+                      <Text style={styles.keywordText}>
+                        {type.replace(/_/g, ' ')}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+
+          {/* Opening Hours */}
+          {place.openingHours &&
+            place.openingHours.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>
+                  🕐 Opening Hours
+                </Text>
+
+                {place.openingHours.map(
+                  (hours, index) => (
+                    <Text
+                      key={index}
+                      style={styles.hoursText}
+                    >
+                      {hours}
+                    </Text>
+                  )
+                )}
+              </View>
+            )}
+
+          {/* Actions */}
           <View style={styles.actions}>
             <TouchableOpacity
-              style={[styles.actionButton, styles.primaryButton]}
+              style={[
+                styles.actionButton,
+                styles.primaryButton,
+              ]}
               onPress={openInGoogleMaps}
             >
-              <Text style={styles.actionIcon}>🗺️</Text>
-              <Text style={styles.actionButtonText}>Open in Maps</Text>
-            </TouchableOpacity>
+              <Text style={styles.actionIcon}>
+                🗺️
+              </Text>
 
-            {place.eLoc && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.secondaryButton]}
-                onPress={openInMappls}
-              >
-                <Text style={styles.actionIcon}>📌</Text>
-                <Text style={[styles.actionButtonText, styles.secondaryActionText]}>
-                  Open in Mappls
-                </Text>
-              </TouchableOpacity>
-            )}
+              <Text style={styles.actionButtonText}>
+                Open in Google Maps
+              </Text>
+            </TouchableOpacity>
           </View>
+
         </ScrollView>
       </View>
     </View>
@@ -145,10 +292,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+
   map: {
     width: '100%',
     height: 250,
   },
+
   detailsCard: {
     flex: 1,
     backgroundColor: colors.cardBackground,
@@ -158,25 +307,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 24,
   },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
   },
+
   shopIcon: {
     fontSize: 32,
     marginRight: 12,
   },
+
   name: {
     fontSize: 22,
     fontWeight: 'bold',
     color: colors.text,
     flex: 1,
   },
+
   infoRow: {
     flexDirection: 'row',
     marginBottom: 12,
   },
+
   infoCard: {
     flex: 1,
     backgroundColor: colors.background,
@@ -185,45 +339,54 @@ const styles = StyleSheet.create({
     marginRight: 8,
     alignItems: 'center',
   },
-  infoCardFull: {
-    backgroundColor: colors.background,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    alignItems: 'center',
-  },
+
   infoIcon: {
     fontSize: 20,
     marginBottom: 4,
   },
+
   infoLabel: {
     fontSize: 12,
     color: colors.textSecondary,
     marginBottom: 4,
   },
+
   infoValue: {
     fontSize: 14,
     fontWeight: 'bold',
     color: colors.text,
   },
+
+  openText: {
+    color: '#2E7D32',
+  },
+
+  closedText: {
+    color: '#C62828',
+  },
+
   section: {
     marginBottom: 20,
   },
+
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: colors.text,
     marginBottom: 8,
   },
+
   address: {
     fontSize: 14,
     color: colors.textSecondary,
     lineHeight: 20,
   },
+
   keywordsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
+
   keywordBadge: {
     backgroundColor: colors.primaryLight,
     paddingHorizontal: 12,
@@ -232,15 +395,26 @@ const styles = StyleSheet.create({
     marginRight: 8,
     marginBottom: 8,
   },
+
   keywordText: {
     fontSize: 12,
     color: colors.textWhite,
     fontWeight: '600',
+    textTransform: 'capitalize',
   },
+
+  hoursText: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    lineHeight: 22,
+    marginBottom: 4,
+  },
+
   actions: {
     marginTop: 10,
     marginBottom: 30,
   },
+
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -249,24 +423,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 12,
   },
+
   primaryButton: {
     backgroundColor: colors.primary,
   },
-  secondaryButton: {
-    backgroundColor: colors.background,
-    borderWidth: 2,
-    borderColor: colors.primary,
-  },
+
   actionIcon: {
     fontSize: 20,
     marginRight: 8,
   },
+
   actionButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: colors.textWhite,
-  },
-  secondaryActionText: {
-    color: colors.primary,
   },
 });
