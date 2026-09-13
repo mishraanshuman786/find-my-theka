@@ -23,7 +23,6 @@
       }
     },
     "android": {
-      "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.jpeg",
         "backgroundColor": "#1B4332"
@@ -50,6 +49,14 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Allow Find My Theka to use your location to find nearby liquor shops."
+        }
+      ],
+     [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
         }
       ]
     ],
