@@ -6,9 +6,9 @@ import axios from 'axios';
 // For physical device: your computer's IP address
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL ||
-  "http://10.208.121.43:3001/api/v1";
+  "http://187.77.136.158:3001/api/v1";
 
-  
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
