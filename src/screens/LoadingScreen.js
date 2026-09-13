@@ -13,7 +13,7 @@ export default function LoadingScreen() {
       <View style={styles.logoContainer}>
         <Text style={styles.logoEmoji}>🍺</Text>
       </View>
-      <Text style={styles.appName}>Find My Theka</Text>
+      <Text style={styles.appName}>FIND MY THEKA</Text>
       <Text style={styles.tagline}>Finding nearby liquor shops...</Text>
       <ActivityIndicator size="large" color={colors.accent} style={styles.loader} />
     </View>
