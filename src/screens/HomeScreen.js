@@ -11,7 +11,7 @@ import {
   Modal,
   SafeAreaView,
 } from "react-native";
-import MapView, { Marker, Callout } from "react-native-maps";
+import MapView, { Marker, Callout, UrlTile } from "react-native-maps";
 import * as Location from "expo-location";
 import { useAuth } from "../context/AuthContext";
 import { placesAPI } from "../api/client";
@@ -176,6 +176,11 @@ export default function HomeScreen({ navigation }) {
         zoomEnabled
         scrollEnabled
       >
+        <UrlTile
+          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maximumZ={19}
+          flipY={false}
+        />
         {/* User location marker */}
         {location && (
           <Marker
