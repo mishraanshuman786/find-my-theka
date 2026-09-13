@@ -162,6 +162,7 @@ export default function HomeScreen({ navigation }) {
       {/* Map */}
       <MapView
         style={styles.map}
+        mapType="none"
         initialRegion={
           location || {
             latitude: 25.4358,
