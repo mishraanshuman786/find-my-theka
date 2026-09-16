@@ -11,12 +11,12 @@ import {
   Modal,
   SafeAreaView,
 } from "react-native";
-import MapView, { Marker, Callout, UrlTile } from "react-native-maps";
+import BottomLocationsSheet from "../components/BottomLocationsSheet";
+import MapView, { Marker, Callout } from "react-native-maps";
 import * as Location from "expo-location";
 import { useAuth } from "../context/AuthContext";
 import { placesAPI } from "../api/client";
 import colors from "../constants/colors";
-import PlaceCard from "../components/PlaceCard";
 
 const { width, height } = Dimensions.get("window");
 
@@ -162,7 +162,6 @@ export default function HomeScreen({ navigation }) {
       {/* Map */}
       <MapView
         style={styles.map}
-        mapType="none"
         initialRegion={
           location || {
             latitude: 25.4358,
@@ -172,16 +171,11 @@ export default function HomeScreen({ navigation }) {
           }
         }
         showsUserLocation
-        showsMyLocationButton
+        showsMyLocationButton={false}
         showsCompass
         zoomEnabled
         scrollEnabled
       >
-        <UrlTile
-          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          maximumZ={19}
-          flipY={false}
-        />
         {/* User location marker */}
         {location && (
           <Marker
@@ -223,23 +217,16 @@ export default function HomeScreen({ navigation }) {
       </MapView>
 
       {/* Top Controls */}
-      <View style={styles.topControls}>
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => navigation.openDrawer?.()}
-        >
-          <Text style={styles.menuButtonText}>☰</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.locateButton}
-          onPress={getCurrentLocation}
-        >
-          <Text style={styles.locateButtonText}>📍</Text>
-        </TouchableOpacity>
-      </View>
+
+      <TouchableOpacity
+        style={styles.locateButton}
+        onPress={getCurrentLocation}
+      >
+        <Text style={styles.locateButtonText}>⌖</Text>
+      </TouchableOpacity>
 
       {/* Radius Selector */}
-      <View style={styles.radiusContainer}>
+      {/* <View style={styles.radiusContainer}>
         <Text style={styles.radiusLabel}>Radius: </Text>
         {[1000, 3000, 5000, 10000].map((r) => (
           <TouchableOpacity
@@ -266,91 +253,17 @@ export default function HomeScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
         ))}
-      </View>
+      </View> */}
 
       {/* Bottom Sheet - Places List */}
-      {searching ? (
-        <View style={styles.bottomSheet}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={styles.searchingText}>Searching nearby thekas...</Text>
-        </View>
-      ) : (
-        <View style={styles.bottomSheet}>
-          <View style={styles.bottomSheetHeader}>
-            <Text style={styles.bottomSheetTitle}>
-              🍺 Nearby Liquor Shops ({places.length})
-            </Text>
-            <TouchableOpacity onPress={() => setShowPlaceList(!showPlaceList)}>
-              <Text style={styles.expandText}>{showPlaceList ? "▼" : "▲"}</Text>
-            </TouchableOpacity>
-          </View>
-
-          {showPlaceList ? (
-            <FlatList
-              data={places}
-              keyExtractor={(item) => item.id || Math.random().toString()}
-              renderItem={({ item }) => (
-                <PlaceCard
-                  place={item}
-                  onPress={() => handlePlacePress(item)}
-                />
-              )}
-              ListEmptyComponent={
-                <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyText}>
-                    No liquor shops found nearby
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.retryButton}
-                    onPress={getCurrentLocation}
-                  >
-                    <Text style={styles.retryButtonText}>Retry</Text>
-                  </TouchableOpacity>
-                </View>
-              }
-              style={styles.placesList}
-            />
-          ) : (
-            <FlatList
-              data={places.slice(0, 2)}
-              keyExtractor={(item) => item.id || Math.random().toString()}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.horizontalList}
-              renderItem={({ item }) => (
-                <PlaceCard
-                  place={item}
-                  onPress={() => handlePlacePress(item)}
-                />
-              )}
-              ListEmptyComponent={
-                <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyText}>No results found</Text>
-                </View>
-              }
-            />
-          )}
-        </View>
-      )}
-
-      {/* Header Menu */}
-      <View style={styles.headerMenu}>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate("SearchHistory")}
-        >
-          <Text style={styles.headerIcon}>📋</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate("Profile")}
-        >
-          <Text style={styles.headerIcon}>👤</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.headerButton} onPress={logout}>
-          <Text style={styles.headerIcon}>🚪</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomLocationsSheet
+        places={places}
+        searching={searching}
+        showPlaceList={showPlaceList}
+        onToggle={() => setShowPlaceList(!showPlaceList)}
+        onPlacePress={handlePlacePress}
+        onRetry={getCurrentLocation}
+      />
     </View>
   );
 }
@@ -399,21 +312,39 @@ const styles = StyleSheet.create({
   menuButtonText: {
     fontSize: 20,
   },
+  // locateButton: {
+  //   width: 44,
+  //   height: 44,
+  //   borderRadius: 22,
+  //   backgroundColor: colors.cardBackground,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   shadowColor: "#000",
+  //   shadowOffset: { width: 0, height: 2 },
+  //   shadowOpacity: 0.2,
+  //   shadowRadius: 4,
+  //   elevation: 4,
+  // },
   locateButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
+     elevation: 4,
     backgroundColor: colors.cardBackground,
+    position: "absolute",
+    top: 16,
+    right: 16,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    zIndex: 10,
   },
   locateButtonText: {
-    fontSize: 20,
+    fontSize: 25,
+    fontWeight: "bold",
+    color: colors.mapUserLocation,
   },
   radiusContainer: {
     position: "absolute",
