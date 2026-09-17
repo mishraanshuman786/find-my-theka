@@ -206,10 +206,16 @@ export default function HomeScreen({ navigation }) {
               }}
               title={place.name}
               description={place.address}
+              anchor={{ x: 0.5, y: 0.5 }}
+              tracksViewChanges={false}
               onPress={() => handlePlacePress(place)}
             >
               <View style={styles.customMarker}>
-                <Text style={styles.markerText}>🍺</Text>
+                <Image
+                  source={require("../../assets/splash.png")} // use the no-background version
+                  style={styles.markerImage}
+                  resizeMode="contain"
+                />
               </View>
             </Marker>
           );
@@ -329,7 +335,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-     elevation: 4,
+    elevation: 4,
     backgroundColor: colors.cardBackground,
     position: "absolute",
     top: 16,
@@ -481,6 +487,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cardBackground,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "visible", // stop the circular border from cropping the icon
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -489,7 +496,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.primary,
   },
-  markerText: {
-    fontSize: 20,
+  markerImage: {
+    width: 26,
+    height: 26, // smaller than the 40px container so it never touches the border/clip edge
   },
 });

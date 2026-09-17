@@ -5,7 +5,8 @@ import colors from "../constants/colors";
 import { useAuth } from "../context/AuthContext";
 import AuthStack from "./AuthStack";
 import MainDrawer from "./MainDrawer";
-import LoadingScreen from "../components/common/LoadingScreen";
+
+import LoadingScreen from "../screens/LoadingScreen";
 
 const AppNavigator = () => {
   const { isAuthenticated, loading } = useAuth();
