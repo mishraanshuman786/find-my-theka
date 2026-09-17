@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Image,
   View,
   Text,
   StyleSheet,
@@ -19,6 +20,8 @@ import { placesAPI } from "../api/client";
 import colors from "../constants/colors";
 
 const { width, height } = Dimensions.get("window");
+const DEBUG_LAT = 25.4358;
+const DEBUG_LNG = 82.8534;
 
 export default function HomeScreen({ navigation }) {
   const { user, logout } = useAuth();
@@ -29,11 +32,29 @@ export default function HomeScreen({ navigation }) {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [showPlaceList, setShowPlaceList] = useState(false);
   const [radius, setRadius] = useState(5000);
+  const [markersSettled, setMarkersSettled] = useState(false); // NEW
 
-  // Request location permission on mount
   useEffect(() => {
+    // used for location change
+    // setLocation({
+    //   latitude: DEBUG_LAT,
+    //   longitude: DEBUG_LNG,
+    //   latitudeDelta: 0.02,
+    //   longitudeDelta: 0.02,
+    // });
+    // searchNearby(DEBUG_LAT, DEBUG_LNG);
+
     requestLocationPermission();
   }, []);
+
+  // NEW: whenever a fresh batch of places arrives, let markers snapshot once, then freeze
+  useEffect(() => {
+    if (places.length > 0) {
+      setMarkersSettled(false);
+      const timer = setTimeout(() => setMarkersSettled(true), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [places]);
 
   const requestLocationPermission = async () => {
     try {
@@ -110,7 +131,7 @@ export default function HomeScreen({ navigation }) {
 
       if (result.success) {
         const nearbyPlaces = result.data?.places || [];
-
+        console.log("First place object:", JSON.stringify(nearbyPlaces[0], null, 2));
         setPlaces(nearbyPlaces);
 
         if (nearbyPlaces.length === 0) {
@@ -207,7 +228,7 @@ export default function HomeScreen({ navigation }) {
               title={place.name}
               description={place.address}
               anchor={{ x: 0.5, y: 0.5 }}
-              tracksViewChanges={false}
+              tracksViewChanges={!markersSettled}
               onPress={() => handlePlacePress(place)}
             >
               <View style={styles.customMarker}>
