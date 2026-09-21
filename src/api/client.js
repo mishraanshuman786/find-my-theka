@@ -3,7 +3,7 @@ import axios from 'axios';
 // API Base URL
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL ||
-  'http://187.77.136.158:3001/api/v1';
+  'https://api.findmythekaa.com/api/v1';
 
 console.log('========================================');
 console.log('🚀 API CONFIG');
