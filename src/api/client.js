@@ -197,6 +197,27 @@ export const authAPI = {
 
     return api.get('/auth/profile');
   },
+
+  forgotPassword: async (email)=>{
+        console.log("forgot password:");
+        console.log("Email:", email);
+
+        return api.post("/auth/forgot-password",{
+          email
+        });
+  },
+  resetPassword: async (data) => {
+  console.log("🔑 RESET PASSWORD");
+  console.log("Email:", data.email);
+  console.log("OTP:", data.otp);
+  console.log("New Password:", data.newPassword);
+
+  return api.post("/auth/reset-password", {
+    email: data.email,
+    otp: data.otp,
+    newPassword: data.newPassword,
+  });
+},
 };
 
 // ========================================

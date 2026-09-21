@@ -50,13 +50,13 @@ export default function LoginScreen({ navigation }) {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Logo/Header */}
         <View style={styles.header}>
-         <View style={styles.logoContainer}>
-  <Image
-    source={require("../../assets/logo.png")}
-    style={styles.logoImage}
-    resizeMode="cover"
-  />
-</View>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require("../../assets/logo.png")}
+              style={styles.logoImage}
+              resizeMode="cover"
+            />
+          </View>
           <Text style={styles.appName}>Find My Theka</Text>
           <Text style={styles.tagline}>Find liquor shops near you</Text>
         </View>
@@ -102,6 +102,13 @@ export default function LoginScreen({ navigation }) {
           </View>
 
           <TouchableOpacity
+            style={styles.forgotPasswordButton}
+            onPress={() => navigation.navigate("ForgotPassword")}
+          >
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             style={[
               styles.loginButton,
               isLoading && styles.loginButtonDisabled,
@@ -136,37 +143,37 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 24,
   },
-header: {
-  alignItems: "center",
-  marginBottom: 40,
-},
-logoContainer: {
-  width: 110,
-  height: 110,
-  borderRadius: 55,
-  overflow: "hidden",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#080808",
-  marginBottom: 16,
-
-  // Android shadow
-  elevation: 6,
-
-  // iOS shadow
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 3,
+  header: {
+    alignItems: "center",
+    marginBottom: 40,
   },
-  shadowOpacity: 0.3,
-  shadowRadius: 6,
-},
-  
- logoImage: {
-  width: "100%",
-  height: "100%",
-},
+  logoContainer: {
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#080808",
+    marginBottom: 16,
+
+    // Android shadow
+    elevation: 6,
+
+    // iOS shadow
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
+
+  logoImage: {
+    width: "100%",
+    height: "100%",
+  },
 
   appName: {
     fontSize: 32,
@@ -265,5 +272,11 @@ logoContainer: {
     color: colors.primary,
     fontSize: 14,
     fontWeight: "bold",
+  },
+  forgotPasswordButton: { alignSelf: "flex-end", marginBottom: 4 },
+  forgotPasswordText: {
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: "600",
   },
 });
