@@ -51,7 +51,7 @@
           "locationAlwaysAndWhenInUsePermission": "Allow Find My Theka to use your location to find nearby liquor shops."
         }
       ],
-     [
+      [
         "expo-build-properties",
         {
           "android": {
@@ -62,8 +62,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "3fdebb06-f922-4bc4-8f93-a9db21a32f48"
+        "projectId": "ae3c4731-6c24-4dd0-af78-f8ff68993e00"
       }
-    }
+    },
+    "owner": "anshuman619"
   }
 }
