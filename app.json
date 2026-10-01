@@ -17,6 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.findmytheka.app",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Find My Theka needs your location to find nearby liquor shops.",
         "NSLocationAlwaysUsageDescription": "Find My Theka needs your location to find nearby liquor shops."
@@ -28,6 +29,7 @@
         "backgroundColor": "#1B4332"
       },
       "package": "com.findmytheka.app",
+       "googleServicesFile": "./google-services.json",
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
@@ -51,6 +53,7 @@
           "locationAlwaysAndWhenInUsePermission": "Allow Find My Theka to use your location to find nearby liquor shops."
         }
       ],
+       "@react-native-google-signin/google-signin",
       [
         "expo-build-properties",
         {

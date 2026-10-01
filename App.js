@@ -1,11 +1,15 @@
 import "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
+import {auth} from "./src/config/firebase";
 import { AuthProvider } from "./src/context/AuthContext";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import AppNavigator from "./src/navigation/AppNavigator";
+import "./src/config/googleAuth";
 
 export default function App() {
+
+  console.log("Firebase initialized:", !!auth);
+
   return (
     <SafeAreaProvider>
       <AuthProvider>

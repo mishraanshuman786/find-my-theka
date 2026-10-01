@@ -2,8 +2,13 @@ import axios from 'axios';
 
 // API Base URL
 const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_URL ||
-  'https://api.findmythekaa.com/api/v1';
+  process.env.EXPO_PUBLIC_API_URL;
+
+  if (!API_BASE_URL) {
+  throw new Error(
+    'EXPO_PUBLIC_API_URL is not configured'
+  );
+}
 
 console.log('========================================');
 console.log('🚀 API CONFIG');
@@ -180,6 +185,49 @@ export const authAPI = {
       if (error.response) {
         console.error('🔴 Status:', error.response.status);
         console.error('🔴 Server Response:', error.response.data);
+      } else if (error.request) {
+        console.error('🔴 Server did not respond');
+      } else {
+        console.error('🔴 Error:', error.message);
+      }
+
+      console.error('🔴 ================================\n');
+
+      throw error;
+    }
+  },
+
+   // Firebase Google / Phone authentication
+  firebaseLogin: async (idToken) => {
+    console.log('\n');
+    console.log('🔥 ================================');
+    console.log('🔥 FIREBASE LOGIN STARTED');
+    console.log('🔥 ================================');
+
+    try {
+      const response = await api.post('/auth/firebase', {
+        idToken,
+      });
+
+      console.log('\n');
+      console.log('✅ ================================');
+      console.log('✅ FIREBASE LOGIN SUCCESS');
+      console.log('✅ Status:', response.status);
+      console.log('✅ User:', response.data?.data?.user);
+      console.log('✅ ================================\n');
+
+      return response;
+    } catch (error) {
+      console.error('\n');
+      console.error('🔴 ================================');
+      console.error('🔴 FIREBASE LOGIN FAILED');
+
+      if (error.response) {
+        console.error('🔴 Status:', error.response.status);
+        console.error(
+          '🔴 Server Response:',
+          error.response.data
+        );
       } else if (error.request) {
         console.error('🔴 Server did not respond');
       } else {

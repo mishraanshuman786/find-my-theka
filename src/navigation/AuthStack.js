@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
+import FirebaseVerifyOTPScreen from "../screens/FirebaseVerifyOtpScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,10 @@ const AuthStack = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
+      />
+      <Stack.Screen 
+         name="VerifyFirebaseOtp"
+         component={FirebaseVerifyOTPScreen}
       />
 
       <Stack.Screen

@@ -1,8 +1,8 @@
 export default {
   // Primary colors - Black / premium dark
-  primary: '#1d1111',
-  primaryLight: '#1A1A1A',
-  primaryDark: '#000000',
+  primary: '#F8A807',
+  primaryLight: '#ffffff',
+  primaryDark:"#000000",
 
   // Accent colors - Antique Gold
   accent: '#C9A45C',

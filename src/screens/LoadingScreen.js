@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useEffect, useRef } from "react";
 import {
   Image,
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
+  Animated,
+   Easing
 } from 'react-native';
 import colors from '../constants/colors';
 
 export default function LoadingScreen() {
+
+  const progress = useRef(new Animated.Value(0)).current;
+
+useEffect(() => {
+  Animated.timing(progress, {
+    toValue: 1,
+    duration: 3000,
+    easing: Easing.linear,
+    useNativeDriver: false,
+  }).start();
+}, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
@@ -18,9 +32,21 @@ export default function LoadingScreen() {
           resizeMode="cover"
         />
         </View>
-      <Text style={styles.appName}>FIND MY THEKA</Text>
+      <Text style={styles.appName}>FindMyTheka</Text>
       <Text style={styles.tagline}>Locate your nearest theka, instantly</Text>
-      <ActivityIndicator size="large" color={colors.accent} style={styles.loader} />
+      <View style={styles.loader}>
+  <Animated.View
+    style={[
+      styles.loaderProgress,
+      {
+        width: progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: ["0%", "100%"],
+        }),
+      },
+    ]}
+  />
+</View>
     </View>
   );
 }
@@ -28,7 +54,7 @@ export default function LoadingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -65,15 +91,26 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: colors.textWhite,
+    color: colors.primary,
     marginBottom: 8,
   },
   tagline: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: colors.primaryDark,
     marginBottom: 30,
   },
   loader: {
-    marginTop: 10,
-  },
+  width: "80%",
+  height: 6,
+  backgroundColor: "#E5E5E5",
+  borderRadius: 3,
+  overflow: "hidden",
+  alignSelf: "center",
+},
+
+loaderProgress: {
+  height: "100%",
+  backgroundColor: colors.primary, 
+  borderRadius: 3,
+},
 });
