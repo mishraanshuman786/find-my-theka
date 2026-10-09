@@ -1,28 +1,18 @@
 export default {
   // Primary colors - Black / premium dark
-  primary: '#F8A807',
+  primary: '#F20D71',
   primaryLight: '#ffffff',
   primaryDark:"#000000",
-
-  // Accent colors - Antique Gold
-  accent: '#C9A45C',
-  accentLight: '#E0C27A',
-  accentDark: '#9E7938',
-
-  // Background colors
-  background: '#F7F3EA',
-  cardBackground: '#FFFFFF',
-  darkBackground: '#080808',
-
-  // Text colors
-  text: '#1A1A1A',
-  textSecondary: '#6B665D',
-  textLight: '#A09A90',
-  textWhite: '#FFFFFF',
-
-  // Brand colors
-  cream: '#F3E6C8',
-  burgundy: '#6B2025',
+  primaryGray:"#B4A8A8",
+  primaryGradient:[
+    { offset: "0%", color: "#5A1220" },
+    { offset: "23%", color: "#4A0F19" },
+    { offset: "45%", color: "#350B13" },
+    { offset: "65%", color: "#240A0F" },
+    { offset: "82%", color: "#180912" },
+    { offset: "100%", color: "#0F070D" },
+  ],
+    white: "#FFFFFF", 
 
   // Status colors
   success: '#3F7D4A',

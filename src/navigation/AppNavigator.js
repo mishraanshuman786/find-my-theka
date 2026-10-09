@@ -3,8 +3,8 @@ import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import colors from "../constants/colors";
 import { useAuth } from "../context/AuthContext";
-import AuthStack from "./AuthStack";
-import MainDrawer from "./MainDrawer";
+import AuthStack from "./stack/AuthStack";
+import MainTabs from "./MainTab";
 
 import LoadingScreen from "../screens/LoadingScreen";
 
@@ -30,7 +30,7 @@ const AppNavigator = () => {
       />
       <NavigationContainer>
        
-        {isAuthenticated ? <MainDrawer /> : <AuthStack />}
+        {isAuthenticated ? <MainTabs /> : <AuthStack />}
       </NavigationContainer>
     </>
   );

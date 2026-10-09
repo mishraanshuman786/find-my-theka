@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1032768433679",
+    "project_id": "find-my-theka",
+    "storage_bucket": "find-my-theka.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032768433679:android:a7b1ce05c79029c88e7d7a",
+        "android_client_info": {
+          "package_name": "com.findmytheka.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032768433679-oq6uts645g2k5g1am10vhhvrnbd2bvv0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.findmytheka.app",
+            "certificate_hash": "30ca0b793003746847232c10bbdccd30602e563c"
+          }
+        },
+        {
+          "client_id": "1032768433679-5c1j3qdv1uvspgijs9tl95mv9o78iche.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBinHJsgnomKM-zPNgq9qKatRpDBDaOFb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032768433679-5c1j3qdv1uvspgijs9tl95mv9o78iche.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1032768433679-hlosodrjqenrifjfikal3vq71hqm30ro.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.findmytheka.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

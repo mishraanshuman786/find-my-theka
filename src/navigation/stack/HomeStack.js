@@ -1,25 +1,29 @@
-
 import React from "react";
-
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import colors from "../constants/colors";
+import colors from "../../constants/colors";
+import DrawerButton from "../../components/navigation/DrawerButton";
+import GradientHeader from "../../components/GradientHeader";
 
-import DrawerButton from "../components/navigation/DrawerButton";
-
-import HomeScreen from "../screens/HomeScreen";
-import PlaceDetailScreen from "../screens/PlaceDetailScreen";
-import SearchHistoryScreen from "../screens/SearchHistoryScreen";
-import ProfileScreen from "../screens/ProfileScreen";
+import HomeScreen from "../../screens/HomeScreen";
+import PlaceDetailScreen from "../../screens/PlaceDetailScreen";
+import SearchHistoryScreen from "../../screens/SearchHistoryScreen";
+import ProfileScreen from "../../screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
 const mainHeaderOptions = {
-  headerStyle: {
-    backgroundColor: colors.primary,
-  },
+  header: (props) => (
+    <GradientHeader {...props} />
+  ),
 
-  headerTintColor: "#fff",
+  headerTransparent: false,
+
+  headerTintColor: colors.white,
+
+  headerTitleStyle: {
+    color: colors.white,
+  },
 
   headerLeftContainerStyle: {
     paddingLeft: 0,
@@ -29,16 +33,14 @@ const mainHeaderOptions = {
 const drawerScreenOptions = ({ navigation }) => ({
   ...mainHeaderOptions,
 
-  headerLeft: () => (
-    <DrawerButton navigation={navigation} />
-  ),
+  // headerLeft: () => (
+  //   <DrawerButton navigation={navigation} />
+  // ),
 });
 
 const HomeStack = () => {
   return (
     <Stack.Navigator>
-    
-
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -47,8 +49,6 @@ const HomeStack = () => {
           title: "Find My Theka",
         })}
       />
-
-     
 
       <Stack.Screen
         name="PlaceDetail"
@@ -59,8 +59,6 @@ const HomeStack = () => {
         }}
       />
 
-     
-
       <Stack.Screen
         name="SearchHistory"
         component={SearchHistoryScreen}
@@ -69,8 +67,6 @@ const HomeStack = () => {
           title: "Search History",
         })}
       />
-
-     
 
       <Stack.Screen
         name="Profile"
@@ -85,4 +81,3 @@ const HomeStack = () => {
 };
 
 export default HomeStack;
-

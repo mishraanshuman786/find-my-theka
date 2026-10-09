@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     // translateY moves it up/down.
     height: EXPANDED_HEIGHT,
 
-    backgroundColor: colors.cardBackground,
+    backgroundColor: colors.primaryLight,
 
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

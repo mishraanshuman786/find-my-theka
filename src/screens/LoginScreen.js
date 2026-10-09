@@ -15,25 +15,18 @@ import {
 import { signInWithGoogle } from "../services/auth/googleAuthService";
 import { useAuth } from "../context/AuthContext";
 import colors from "../constants/colors";
-
+import GradientBackground from "../components/GradientBackground";
 export default function LoginScreen({ navigation }) {
-  const {
-    login,
-    loginWithFirebase,
-    clearError,
-  } = useAuth();
+  const { login, loginWithFirebase, clearError } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [isEmailLoading, setIsEmailLoading] =
-    useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
 
-  const [isGoogleLoading, setIsGoogleLoading] =
-    useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  const [showPassword, setShowPassword] =
-    useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // --------------------------------------------------
   // Google Login
@@ -46,34 +39,24 @@ export default function LoginScreen({ navigation }) {
 
       const result = await signInWithGoogle();
 
-      const loginResult =
-        await loginWithFirebase(
-          result.firebaseIdToken
-        );
+      const loginResult = await loginWithFirebase(result.firebaseIdToken);
 
       if (!loginResult.success) {
         Alert.alert(
           "Google Login Failed",
-          loginResult.error ||
-            "Unable to login with Google."
+          loginResult.error || "Unable to login with Google.",
         );
 
         return;
       }
 
-      console.log(
-        "Google login successful"
-      );
+      console.log("Google login successful");
     } catch (error) {
-      console.error(
-        "Google login failed:",
-        error
-      );
+      console.error("Google login failed:", error);
 
       Alert.alert(
         "Google Login Failed",
-        error?.message ||
-          "Unable to login with Google."
+        error?.message || "Unable to login with Google.",
       );
     } finally {
       setIsGoogleLoading(false);
@@ -88,18 +71,12 @@ export default function LoginScreen({ navigation }) {
     const trimmedEmail = email.trim();
 
     if (!trimmedEmail) {
-      Alert.alert(
-        "Error",
-        "Please enter your email."
-      );
+      Alert.alert("Error", "Please enter your email.");
       return;
     }
 
     if (!password.trim()) {
-      Alert.alert(
-        "Error",
-        "Please enter your password."
-      );
+      Alert.alert("Error", "Please enter your password.");
       return;
     }
 
@@ -107,16 +84,12 @@ export default function LoginScreen({ navigation }) {
       setIsEmailLoading(true);
       clearError();
 
-      const result = await login(
-        trimmedEmail,
-        password
-      );
+      const result = await login(trimmedEmail, password);
 
       if (!result.success) {
         Alert.alert(
           "Login Failed",
-          result.error ||
-            "Unable to login. Please try again."
+          result.error || "Unable to login. Please try again.",
         );
       }
     } finally {
@@ -131,25 +104,18 @@ export default function LoginScreen({ navigation }) {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={
-        Platform.OS === "ios"
-          ? "padding"
-          : undefined
-      }
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <ScrollView
-        contentContainerStyle={
-          styles.scrollContent
-        }
+        contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
         {/* ================= HEADER ================= */}
 
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>
-            Welcome Back
-          </Text>
+          <GradientBackground style={styles.headerBackground} />
+          <Text style={styles.headerTitle}>Welcome Back</Text>
 
           <Text style={styles.headerSubtitle}>
             Sign in to find shops near you
@@ -164,9 +130,7 @@ export default function LoginScreen({ navigation }) {
           <View style={styles.formSection}>
             {/* Email */}
 
-            <Text style={styles.label}>
-              Email
-            </Text>
+            <Text style={styles.label}>Email</Text>
 
             <TextInput
               style={styles.input}
@@ -182,29 +146,17 @@ export default function LoginScreen({ navigation }) {
 
             {/* Password */}
 
-            <View
-              style={styles.passwordSection}
-            >
-              <Text style={styles.label}>
-                Password
-              </Text>
+            <View style={styles.passwordSection}>
+              <Text style={styles.label}>Password</Text>
 
-              <View
-                style={
-                  styles.passwordContainer
-                }
-              >
+              <View style={styles.passwordContainer}>
                 <TextInput
-                  style={
-                    styles.passwordInput
-                  }
+                  style={styles.passwordInput}
                   placeholder="Enter your password"
                   placeholderTextColor="#B5AFB2"
                   value={password}
                   onChangeText={setPassword}
-                  secureTextEntry={
-                    !showPassword
-                  }
+                  secureTextEntry={!showPassword}
                   autoCapitalize="none"
                   autoComplete="password"
                   editable={!isEmailLoading}
@@ -212,21 +164,11 @@ export default function LoginScreen({ navigation }) {
 
                 <TouchableOpacity
                   style={styles.eyeButton}
-                  onPress={() =>
-                    setShowPassword(
-                      !showPassword
-                    )
-                  }
-                  disabled={
-                    isEmailLoading
-                  }
+                  onPress={() => setShowPassword(!showPassword)}
+                  disabled={isEmailLoading}
                 >
-                  <Text
-                    style={styles.eyeText}
-                  >
-                    {showPassword
-                      ? "👁️"
-                      : "👁️‍🗨️"}
+                  <Text style={styles.eyeText}>
+                    {showPassword ? "👁️" : "👁️‍🗨️"}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -236,21 +178,10 @@ export default function LoginScreen({ navigation }) {
 
             <TouchableOpacity
               style={styles.forgotButton}
-              onPress={() =>
-                navigation.navigate(
-                  "ForgotPassword"
-                )
-              }
-              disabled={
-                isEmailLoading ||
-                isGoogleLoading
-              }
+              onPress={() => navigation.navigate("ForgotPassword")}
+              disabled={isEmailLoading || isGoogleLoading}
             >
-              <Text
-                style={styles.forgotText}
-              >
-                Forgot Password?
-              </Text>
+              <Text style={styles.forgotText}>Forgot Password?</Text>
             </TouchableOpacity>
 
             {/* Login Button */}
@@ -258,41 +189,24 @@ export default function LoginScreen({ navigation }) {
             <TouchableOpacity
               style={[
                 styles.primaryButton,
-                isEmailLoading &&
-                  styles.buttonDisabled,
+                isEmailLoading && styles.buttonDisabled,
               ]}
               onPress={handleEmailLogin}
-              disabled={
-                isEmailLoading ||
-                isGoogleLoading
-              }
+              disabled={isEmailLoading || isGoogleLoading}
             >
-              <Text
-                style={
-                  styles.primaryButtonText
-                }
-              >
-                {isEmailLoading
-                  ? "Logging in..."
-                  : "Login"}
+              <GradientBackground style={styles.headerBackground} />
+              <Text style={styles.primaryButtonText}>
+                {isEmailLoading ? "Logging in..." : "Login"}
               </Text>
             </TouchableOpacity>
           </View>
 
           {/* ================= DIVIDER ================= */}
 
-          <View
-            style={
-              styles.dividerContainer
-            }
-          >
+          <View style={styles.dividerContainer}>
             <View style={styles.divider} />
 
-            <Text
-              style={styles.dividerText}
-            >
-              or continue with
-            </Text>
+            <Text style={styles.dividerText}>or continue with</Text>
 
             <View style={styles.divider} />
           </View>
@@ -302,61 +216,30 @@ export default function LoginScreen({ navigation }) {
           <TouchableOpacity
             style={[
               styles.googleButton,
-              isGoogleLoading &&
-                styles.buttonDisabled,
+              isGoogleLoading && styles.buttonDisabled,
             ]}
             onPress={handleGoogleLogin}
-            disabled={
-              isGoogleLoading ||
-              isEmailLoading
-            }
+            disabled={isGoogleLoading || isEmailLoading}
           >
-            <View
-              style={
-                styles.googleIconContainer
-              }
-            >
-              <Text
-                style={styles.googleIcon}
-              >
-                G
-              </Text>
+            <View style={styles.googleIconContainer}>
+              <Text style={styles.googleIcon}>G</Text>
             </View>
 
-            <Text
-              style={
-                styles.googleButtonText
-              }
-            >
-              {isGoogleLoading
-                ? "Signing in..."
-                : "Continue With Google"}
+            <Text style={styles.googleButtonText}>
+              {isGoogleLoading ? "Signing in..." : "Continue With Google"}
             </Text>
           </TouchableOpacity>
 
           {/* ================= REGISTER ================= */}
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              New here?
-            </Text>
+            <Text style={styles.footerText}>New here?</Text>
 
             <TouchableOpacity
-              onPress={() =>
-                navigation.navigate(
-                  "Register"
-                )
-              }
-              disabled={
-                isEmailLoading ||
-                isGoogleLoading
-              }
+              onPress={() => navigation.navigate("Register")}
+              disabled={isEmailLoading || isGoogleLoading}
             >
-              <Text
-                style={styles.footerLink}
-              >
-                Create An Account
-              </Text>
+              <Text style={styles.footerLink}>Create An Account</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -384,6 +267,13 @@ const styles = StyleSheet.create({
   // Header
   // ------------------------------------------------
 
+  headerBackground: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
   header: {
     backgroundColor: "#FFB20A",
     minHeight: 201,
@@ -393,15 +283,15 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
-    fontSize: 34,
+    fontSize: 25,
     fontWeight: "800",
-    color: "#000000",
-    marginBottom: 8,
+    color: colors.primaryLight,
+    marginBottom: 4,
   },
 
   headerSubtitle: {
-    fontSize: 20,
-    color: "#000000",
+    fontSize: 15,
+    color: colors.primaryLight,
     fontWeight: "400",
   },
 
@@ -484,9 +374,16 @@ const styles = StyleSheet.create({
   },
 
   forgotText: {
-    color: "#F5A900",
+    color: colors.primary,
     fontSize: 14,
     fontWeight: "600",
+  },
+  background: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 
   // ------------------------------------------------
@@ -495,7 +392,7 @@ const styles = StyleSheet.create({
 
   primaryButton: {
     height: 45,
-    backgroundColor: "#000000",
+    overflow: "hidden",
     borderRadius: 9,
     alignItems: "center",
     justifyContent: "center",
@@ -587,10 +484,9 @@ const styles = StyleSheet.create({
   },
 
   footerLink: {
-    color: "#F5A900",
+    color: colors.primary,
     fontSize: 14,
     fontWeight: "700",
     marginLeft: 4,
   },
 });
-

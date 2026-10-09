@@ -1,25 +1,22 @@
-import axios from 'axios';
+import axios from "axios";
 
 // API Base URL
-const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_URL;
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
-  if (!API_BASE_URL) {
-  throw new Error(
-    'EXPO_PUBLIC_API_URL is not configured'
-  );
+if (!API_BASE_URL) {
+  throw new Error("EXPO_PUBLIC_API_URL is not configured");
 }
 
-console.log('========================================');
-console.log('🚀 API CONFIG');
-console.log('Base URL:', API_BASE_URL);
-console.log('========================================');
+console.log("========================================");
+console.log("🚀 API CONFIG");
+console.log("Base URL:", API_BASE_URL);
+console.log("========================================");
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -31,14 +28,14 @@ api.interceptors.request.use(
   (config) => {
     const token = global.authToken;
 
-    console.log('\n========================================');
-    console.log('📤 API REQUEST');
-    console.log('Method:', config.method?.toUpperCase());
-    console.log('URL:', `${config.baseURL}${config.url}`);
-    console.log('Params:', config.params || 'None');
-    console.log('Body:', config.data || 'None');
-    console.log('Has Auth Token:', !!token);
-    console.log('========================================');
+    console.log("\n========================================");
+    console.log("📤 API REQUEST");
+    console.log("Method:", config.method?.toUpperCase());
+    console.log("URL:", `${config.baseURL}${config.url}`);
+    console.log("Params:", config.params || "None");
+    console.log("Body:", config.data || "None");
+    console.log("Has Auth Token:", !!token);
+    console.log("========================================");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -47,11 +44,11 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error('\n❌ REQUEST INTERCEPTOR ERROR');
+    console.error("\n❌ REQUEST INTERCEPTOR ERROR");
     console.error(error);
 
     return Promise.reject(error);
-  }
+  },
 );
 
 // ========================================
@@ -60,35 +57,29 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    console.log('\n========================================');
-    console.log('📥 API SUCCESS');
-    console.log('Status:', response.status);
-    console.log(
-      'URL:',
-      `${response.config.baseURL}${response.config.url}`
-    );
-    console.log('Response:', response.data);
-    console.log('========================================\n');
+    console.log("\n========================================");
+    console.log("📥 API SUCCESS");
+    console.log("Status:", response.status);
+    console.log("URL:", `${response.config.baseURL}${response.config.url}`);
+    console.log("Response:", response.data);
+    console.log("========================================\n");
 
     return response;
   },
 
   (error) => {
-    console.error('\n========================================');
-    console.error('❌ API ERROR');
+    console.error("\n========================================");
+    console.error("❌ API ERROR");
 
     // Server responded with an error
     if (error.response) {
-      console.error('Status:', error.response.status);
-      console.error(
-        'URL:',
-        `${error.config?.baseURL}${error.config?.url}`
-      );
-      console.error('Response:', error.response.data);
-      console.error('Headers:', error.response.headers);
+      console.error("Status:", error.response.status);
+      console.error("URL:", `${error.config?.baseURL}${error.config?.url}`);
+      console.error("Response:", error.response.data);
+      console.error("Headers:", error.response.headers);
 
       if (error.response.status === 401) {
-        console.error('🔐 401 Unauthorized - Clearing auth token');
+        console.error("🔐 401 Unauthorized - Clearing auth token");
 
         global.authToken = null;
       }
@@ -96,24 +87,24 @@ api.interceptors.response.use(
 
     // Request was sent but server did not respond
     else if (error.request) {
-      console.error('🌐 NO RESPONSE FROM SERVER');
-      console.error('Request:', error.request);
+      console.error("🌐 NO RESPONSE FROM SERVER");
+      console.error("Request:", error.request);
       console.error(
-        'Possible causes: server down, network issue, wrong IP/port, firewall, etc.'
+        "Possible causes: server down, network issue, wrong IP/port, firewall, etc.",
       );
     }
 
     // Something went wrong while creating the request
     else {
-      console.error('⚠️ REQUEST SETUP ERROR');
-      console.error('Message:', error.message);
+      console.error("⚠️ REQUEST SETUP ERROR");
+      console.error("Message:", error.message);
     }
 
-    console.error('Full Error:', error);
-    console.error('========================================\n');
+    console.error("Full Error:", error);
+    console.error("========================================\n");
 
     return Promise.reject(error);
-  }
+  },
 );
 
 // ========================================
@@ -122,150 +113,147 @@ api.interceptors.response.use(
 
 export const authAPI = {
   register: async (data) => {
-    console.log('\n');
-    console.log('🟢 ================================');
-    console.log('🟢 REGISTER STARTED');
-    console.log('🟢 Data:', data);
-    console.log('🟢 ================================');
+    console.log("\n");
+    console.log("🟢 ================================");
+    console.log("🟢 REGISTER STARTED");
+    console.log("🟢 Data:", data);
+    console.log("🟢 ================================");
 
     try {
-      const response = await api.post('/auth/register', data);
+      const response = await api.post("/auth/register", data);
 
-      console.log('\n');
-      console.log('✅ ================================');
-      console.log('✅ REGISTER SUCCESS');
-      console.log('✅ Status:', response.status);
-      console.log('✅ Response:', response.data);
-      console.log('✅ ================================\n');
+      console.log("\n");
+      console.log("✅ ================================");
+      console.log("✅ REGISTER SUCCESS");
+      console.log("✅ Status:", response.status);
+      console.log("✅ Response:", response.data);
+      console.log("✅ ================================\n");
 
       return response;
     } catch (error) {
-      console.error('\n');
-      console.error('🔴 ================================');
-      console.error('🔴 REGISTER FAILED');
+      console.error("\n");
+      console.error("🔴 ================================");
+      console.error("🔴 REGISTER FAILED");
 
       if (error.response) {
-        console.error('🔴 Status:', error.response.status);
-        console.error('🔴 Server Response:', error.response.data);
+        console.error("🔴 Status:", error.response.status);
+        console.error("🔴 Server Response:", error.response.data);
       } else if (error.request) {
-        console.error('🔴 Server did not respond');
+        console.error("🔴 Server did not respond");
       } else {
-        console.error('🔴 Error:', error.message);
+        console.error("🔴 Error:", error.message);
       }
 
-      console.error('🔴 ================================\n');
+      console.error("🔴 ================================\n");
 
       throw error;
     }
   },
 
   login: async (data) => {
-    console.log('\n');
-    console.log('🔵 ================================');
-    console.log('🔵 LOGIN STARTED');
-    console.log('🔵 Data:', data);
-    console.log('🔵 ================================');
+    console.log("\n");
+    console.log("🔵 ================================");
+    console.log("🔵 LOGIN STARTED");
+    console.log("🔵 Data:", data);
+    console.log("🔵 ================================");
 
     try {
-      const response = await api.post('/auth/login', data);
+      const response = await api.post("/auth/login", data);
 
-      console.log('\n');
-      console.log('✅ ================================');
-      console.log('✅ LOGIN SUCCESS');
-      console.log('✅ Status:', response.status);
-      console.log('✅ Response:', response.data);
-      console.log('✅ ================================\n');
+      console.log("\n");
+      console.log("✅ ================================");
+      console.log("✅ LOGIN SUCCESS");
+      console.log("✅ Status:", response.status);
+      console.log("✅ Response:", response.data);
+      console.log("✅ ================================\n");
 
       return response;
     } catch (error) {
-      console.error('\n');
-      console.error('🔴 ================================');
-      console.error('🔴 LOGIN FAILED');
+      console.error("\n");
+      console.error("🔴 ================================");
+      console.error("🔴 LOGIN FAILED");
 
       if (error.response) {
-        console.error('🔴 Status:', error.response.status);
-        console.error('🔴 Server Response:', error.response.data);
+        console.error("🔴 Status:", error.response.status);
+        console.error("🔴 Server Response:", error.response.data);
       } else if (error.request) {
-        console.error('🔴 Server did not respond');
+        console.error("🔴 Server did not respond");
       } else {
-        console.error('🔴 Error:', error.message);
+        console.error("🔴 Error:", error.message);
       }
 
-      console.error('🔴 ================================\n');
+      console.error("🔴 ================================\n");
 
       throw error;
     }
   },
 
-   // Firebase Google / Phone authentication
+  // Firebase Google / Phone authentication
   firebaseLogin: async (idToken) => {
-    console.log('\n');
-    console.log('🔥 ================================');
-    console.log('🔥 FIREBASE LOGIN STARTED');
-    console.log('🔥 ================================');
+    console.log("\n");
+    console.log("🔥 ================================");
+    console.log("🔥 FIREBASE LOGIN STARTED");
+    console.log("🔥 ================================");
 
     try {
-      const response = await api.post('/auth/firebase', {
+      const response = await api.post("/auth/firebase", {
         idToken,
       });
 
-      console.log('\n');
-      console.log('✅ ================================');
-      console.log('✅ FIREBASE LOGIN SUCCESS');
-      console.log('✅ Status:', response.status);
-      console.log('✅ User:', response.data?.data?.user);
-      console.log('✅ ================================\n');
+      console.log("\n");
+      console.log("✅ ================================");
+      console.log("✅ FIREBASE LOGIN SUCCESS");
+      console.log("✅ Status:", response.status);
+      console.log("✅ User:", response.data?.data?.user);
+      console.log("✅ ================================\n");
 
       return response;
     } catch (error) {
-      console.error('\n');
-      console.error('🔴 ================================');
-      console.error('🔴 FIREBASE LOGIN FAILED');
+      console.error("\n");
+      console.error("🔴 ================================");
+      console.error("🔴 FIREBASE LOGIN FAILED");
 
       if (error.response) {
-        console.error('🔴 Status:', error.response.status);
-        console.error(
-          '🔴 Server Response:',
-          error.response.data
-        );
+        console.error("🔴 Status:", error.response.status);
+        console.error("🔴 Server Response:", error.response.data);
       } else if (error.request) {
-        console.error('🔴 Server did not respond');
+        console.error("🔴 Server did not respond");
       } else {
-        console.error('🔴 Error:', error.message);
+        console.error("🔴 Error:", error.message);
       }
 
-      console.error('🔴 ================================\n');
+      console.error("🔴 ================================\n");
 
       throw error;
     }
   },
 
   getProfile: async () => {
-    console.log('👤 GET PROFILE');
+    console.log("👤 GET PROFILE");
 
-    return api.get('/auth/profile');
+    return api.get("/auth/profile");
   },
 
-  forgotPassword: async (email)=>{
-        console.log("forgot password:");
-        console.log("Email:", email);
+  forgotPassword: async (email) => {
+    console.log("forgot password:");
+    console.log("Email:", email);
 
-        return api.post("/auth/forgot-password",{
-          email
-        });
+    return api.post("/auth/forgot-password", {
+      email,
+    });
   },
   resetPassword: async (data) => {
-  console.log("🔑 RESET PASSWORD");
-  console.log("Email:", data.email);
-  console.log("OTP:", data.otp);
-  console.log("New Password:", data.newPassword);
+    console.log("🔑 RESET PASSWORD");
+    console.log("Email:", data.email);
+    console.log("OTP:", data.otp);
+    console.log("New Password:", data.newPassword);
 
-  return api.post("/auth/reset-password", {
-    email: data.email,
-    otp: data.otp,
-    newPassword: data.newPassword,
-  });
-},
+    return api.post("/auth/reset-password", {
+      email: data.email,
+      otp: data.otp,
+      newPassword: data.newPassword,
+    });
+  },
 };
 
 // ========================================
@@ -274,23 +262,52 @@ export const authAPI = {
 
 export const placesAPI = {
   getNearby: async (params = {}) => {
-    console.log('📍 GET NEARBY PLACES');
-    console.log('📍 Params:', params);
+    console.log("📍 GET NEARBY PLACES");
+    console.log("📍 Params:", params);
 
-    return api.get('/places/nearby', { params });
+    return api.get("/places/nearby", { params });
   },
 
   search: async (data) => {
-    console.log('🔎 SEARCH PLACES');
-    console.log('🔎 Data:', data);
+    console.log("🔎 SEARCH PLACES");
+    console.log("🔎 Data:", data);
 
-    return api.post('/places/search', data);
+    return api.post("/places/search", data);
   },
 
   getHistory: async () => {
-    console.log('📜 GET HISTORY');
+    console.log("📜 GET HISTORY");
 
-    return api.get('/places/history');
+    return api.get("/places/history");
+  },
+};
+
+// ========================================
+// THEKAS API
+// ========================================
+
+export const thekasAPI = {
+  // Register a new Theka
+  register: async (data) => {
+    console.log("🏪 REGISTER THEKA");
+    console.log("Data:", data);
+
+    return api.post("/thekas/", data);
+  },
+
+  // Get all Thekas belonging to the logged-in user
+  getMyThekas: async () => {
+    console.log("🏪 GET MY THEKAS");
+
+    return api.get("/thekas");
+  },
+
+  // Get details of a specific Theka
+  getDetails: async (id) => {
+    console.log("🏪 GET THEKA DETAILS");
+    console.log("Theka ID:", id);
+
+    return api.get(`/thekas/${id}`);
   },
 };
 
@@ -299,17 +316,17 @@ export const placesAPI = {
 // ========================================
 
 export const healthCheck = async () => {
-  console.log('❤️ HEALTH CHECK');
+  console.log("❤️ HEALTH CHECK");
 
   try {
-    const response = await api.get('/health');
+    const response = await api.get("/health");
 
-    console.log('✅ HEALTH CHECK SUCCESS');
-    console.log('Response:', response.data);
+    console.log("✅ HEALTH CHECK SUCCESS");
+    console.log("Response:", response.data);
 
     return response;
   } catch (error) {
-    console.error('❌ HEALTH CHECK FAILED');
+    console.error("❌ HEALTH CHECK FAILED");
 
     throw error;
   }

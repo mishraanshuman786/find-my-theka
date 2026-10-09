@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -6,43 +6,38 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  
-} from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { useAuth } from '../context/AuthContext';
-import colors from '../constants/colors';
+} from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import ThekaSection from "../components/Profile/ThekaSection";
+import { useAuth } from "../context/AuthContext";
+import colors from "../constants/colors";
+import OptionsList from "../components/Profile/OptionsList";
 
-export default function ProfileScreen() {
-  const { user,fetchProfile, logout } = useAuth();
-
+export default function ProfileScreen({navigation}) {
+  const { user, fetchProfile, logout } = useAuth();
 
   useFocusEffect(
-  useCallback(() => {
-    const loadProfile = async () => {
-      await fetchProfile();
-    };
+    useCallback(() => {
+      const loadProfile = async () => {
+        await fetchProfile();
+      };
 
-    loadProfile();
-  }, [fetchProfile])
-);
- 
+      loadProfile();
+    }, [fetchProfile]),
+  );
 
   const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: logout,
-        },
-      ]
-    );
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: logout,
+      },
+    ]);
   };
 
-  console.log("New User",user);
+  console.log("New User", user);
 
   return (
     <ScrollView style={styles.container}>
@@ -50,82 +45,26 @@ export default function ProfileScreen() {
       <View style={styles.header}>
         <View style={styles.avatarContainer}>
           <Text style={styles.avatarText}>
-            {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+            {user?.name?.charAt(0)?.toUpperCase() || "U"}
           </Text>
         </View>
-        <Text style={styles.name}>{user?.name || 'User'}</Text>
-        <Text style={styles.email}>{user?.email}</Text>
-      </View>
-
-      {/* User Info */}
-      <View style={styles.infoSection}>
-        <Text style={styles.sectionTitle}>Account Information</Text>
-
-        <View style={styles.infoCard}>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoIcon}>👤</Text>
-            <View style={styles.infoContent}>
-              <Text style={styles.infoLabel}>Full Name</Text>
-              <Text style={styles.infoValue}>{user?.name || 'N/A'}</Text>
-            </View>
-          </View>
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <Text style={styles.infoIcon}>📧</Text>
-            <View style={styles.infoContent}>
-              <Text style={styles.infoLabel}>Email</Text>
-              <Text style={styles.infoValue}>{user?.email || 'N/A'}</Text>
-            </View>
-          </View>
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <Text style={styles.infoIcon}>📱</Text>
-            <View style={styles.infoContent}>
-              <Text style={styles.infoLabel}>Phone</Text>
-              <Text style={styles.infoValue}>{user?.phone || 'Not provided'}</Text>
-            </View>
-          </View>
+        <View style={styles.rightContainer}>
+          <Text style={styles.name}>{user?.name || "User"}</Text>
+          <Text style={styles.email}>{user?.email}</Text>
+          <Text style={styles.mobile}>{user?.phone || "Not provided"}</Text>
         </View>
       </View>
+      <View style={styles.divider} />
 
-      {/* App Info */}
-      <View style={styles.infoSection}>
-        <Text style={styles.sectionTitle}>About App</Text>
+      {/* Theka Section */}
+      <ThekaSection navigation={navigation} />
 
-        <View style={styles.infoCard}>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoIcon}>📱</Text>
-            <View style={styles.infoContent}>
-              <Text style={styles.infoLabel}>App Name</Text>
-              <Text style={styles.infoValue}>Find My Theka</Text>
-            </View>
-          </View>
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <Text style={styles.infoIcon}>🔢</Text>
-            <View style={styles.infoContent}>
-              <Text style={styles.infoLabel}>Version</Text>
-              <Text style={styles.infoValue}>1.0.0</Text>
-            </View>
-          </View>
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <Text style={styles.infoIcon}>🗺️</Text>
-            <View style={styles.infoContent}>
-              <Text style={styles.infoLabel}>Maps Provider</Text>
-              <Text style={styles.infoValue}>Mappls (MapmyIndia)</Text>
-            </View>
-          </View>
-        </View>
-      </View>
+{/* Options List */}
+      <OptionsList navigation={navigation} />
 
       {/* Logout Button */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>🚪 Logout</Text>
+        <Text style={styles.logoutButtonText}>Logout</Text>
       </TouchableOpacity>
 
       <View style={styles.footer}>
@@ -139,61 +78,76 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.primaryLight,
   },
   header: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primaryLight,
     paddingVertical: 30,
     paddingHorizontal: 20,
-    alignItems: 'center',
+    alignItems: "center",
+    flex: 1,
+    flexDirection: "row",
+    // borderBottomColor:colors.primaryGray,
+    // borderBottomWidth:1,
+    gap: 10,
+  },
+  rightContainer: {
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
   avatarContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
+    backgroundColor: colors.primary,
+    justifyContent: "center",
+    alignItems: "center",
+
     borderWidth: 3,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
+    borderColor: "rgba(255, 255, 255, 0.5)",
   },
   avatarText: {
     fontSize: 36,
-    fontWeight: 'bold',
-    color: colors.textWhite,
+    fontWeight: "bold",
+    color: colors.primaryLight,
   },
   name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.textWhite,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: colors.primaryDark,
     marginBottom: 4,
   },
   email: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    fontWeight: "bold",
+    color: colors.primaryGray,
+  },
+  mobile: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: colors.primaryGray,
   },
   infoSection: {
     padding: 16,
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.text,
     marginBottom: 12,
   },
   infoCard: {
     backgroundColor: colors.cardBackground,
     borderRadius: 12,
-    overflow: 'hidden',
-    shadowColor: '#000',
+    overflow: "hidden",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
   infoRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 16,
   },
   infoIcon: {
@@ -210,28 +164,28 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: "500",
     color: colors.text,
   },
   divider: {
     height: 1,
     backgroundColor: colors.border,
-    marginLeft: 50,
+    marginInline: 16,
   },
   logoutButton: {
     margin: 16,
     backgroundColor: colors.error,
     borderRadius: 12,
     padding: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   logoutButtonText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.textWhite,
+    fontWeight: "bold",
+    color: colors.primaryLight,
   },
   footer: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: 20,
   },
   footerText: {

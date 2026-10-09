@@ -11,8 +11,9 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-
+import GradientBackground from "../components/GradientBackground";
 import { useAuth } from "../context/AuthContext";
+import colors from "../constants/colors";
 
 export default function RegisterScreen({ navigation }) {
   const { register } = useAuth();
@@ -38,8 +39,7 @@ export default function RegisterScreen({ navigation }) {
     }
 
     // Basic and practical email validation
-    const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(trimmedEmail)) {
       return "Please enter a valid email address";
@@ -73,43 +73,30 @@ export default function RegisterScreen({ navigation }) {
     }
 
     // Email validation
-    const emailValidationError =
-      validateEmail(cleanedEmail);
+    const emailValidationError = validateEmail(cleanedEmail);
 
     if (emailValidationError) {
       setEmailError(emailValidationError);
 
-      Alert.alert(
-        "Invalid Email",
-        emailValidationError
-      );
+      Alert.alert("Invalid Email", emailValidationError);
 
       return;
     }
 
     // Phone validation
     if (!cleanedPhone) {
-      Alert.alert(
-        "Error",
-        "Please enter your mobile number"
-      );
+      Alert.alert("Error", "Please enter your mobile number");
       return;
     }
 
     if (cleanedPhone.length !== 10) {
-      Alert.alert(
-        "Error",
-        "Please enter a valid 10-digit mobile number"
-      );
+      Alert.alert("Error", "Please enter a valid 10-digit mobile number");
       return;
     }
 
     // Password validation
     if (password.length < 6) {
-      Alert.alert(
-        "Error",
-        "Password must be at least 6 characters"
-      );
+      Alert.alert("Error", "Password must be at least 6 characters");
       return;
     }
 
@@ -123,26 +110,19 @@ export default function RegisterScreen({ navigation }) {
         cleanedName,
         cleanedEmail,
         password,
-        phoneNumber
+        phoneNumber,
       );
 
       if (!result.success) {
         Alert.alert(
           "Registration Failed",
-          result.error ||
-            "Unable to register"
+          result.error || "Unable to register",
         );
       }
     } catch (error) {
-      console.error(
-        "Registration failed:",
-        error
-      );
+      console.error("Registration failed:", error);
 
-      Alert.alert(
-        "Registration Failed",
-        "Something went wrong"
-      );
+      Alert.alert("Registration Failed", "Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -151,38 +131,26 @@ export default function RegisterScreen({ navigation }) {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={
-        Platform.OS === "ios"
-          ? "padding"
-          : undefined
-      }
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <ScrollView
-        contentContainerStyle={
-          styles.scrollContent
-        }
+        contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
         {/* Orange Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>
-            Create account
-          </Text>
+          <GradientBackground style={styles.headerBackground} />
+          <Text style={styles.headerTitle}>Create account</Text>
 
-          <Text style={styles.headerSubtitle}>
-            Take less than a minute
-          </Text>
+          <Text style={styles.headerSubtitle}>Take less than a minute</Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
-
           {/* Full Name */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>
-              Full Name
-            </Text>
+            <Text style={styles.label}>Full Name</Text>
 
             <TextInput
               style={styles.input}
@@ -196,16 +164,10 @@ export default function RegisterScreen({ navigation }) {
 
           {/* Email */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>
-              Email
-            </Text>
+            <Text style={styles.label}>Email</Text>
 
             <TextInput
-              style={[
-                styles.input,
-                emailError &&
-                  styles.inputError,
-              ]}
+              style={[styles.input, emailError && styles.inputError]}
               placeholder="Enter Your Email"
               placeholderTextColor="#B7B1B1"
               value={email}
@@ -217,28 +179,16 @@ export default function RegisterScreen({ navigation }) {
             />
 
             {emailError ? (
-              <Text style={styles.errorText}>
-                {emailError}
-              </Text>
+              <Text style={styles.errorText}>{emailError}</Text>
             ) : null}
           </View>
 
           {/* Mobile Number */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>
-              Mobile Number
-            </Text>
+            <Text style={styles.label}>Mobile Number</Text>
 
-            <View
-              style={
-                styles.phoneInputContainer
-              }
-            >
-              <Text
-                style={styles.countryCode}
-              >
-                +91
-              </Text>
+            <View style={styles.phoneInputContainer}>
+              <Text style={styles.countryCode}>+91</Text>
 
               <TextInput
                 style={styles.phoneInput}
@@ -246,16 +196,9 @@ export default function RegisterScreen({ navigation }) {
                 placeholderTextColor="#B7B1B1"
                 value={phone}
                 onChangeText={(text) => {
-                  const numbersOnly =
-                    text.replace(
-                      /\D/g,
-                      ""
-                    );
+                  const numbersOnly = text.replace(/\D/g, "");
 
-                  if (
-                    numbersOnly.length <=
-                    10
-                  ) {
+                  if (numbersOnly.length <= 10) {
                     setPhone(numbersOnly);
                   }
                 }}
@@ -267,45 +210,25 @@ export default function RegisterScreen({ navigation }) {
 
           {/* Password */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>
-              Password
-            </Text>
+            <Text style={styles.label}>Password</Text>
 
-            <View
-              style={
-                styles.passwordContainer
-              }
-            >
+            <View style={styles.passwordContainer}>
               <TextInput
-                style={
-                  styles.passwordInput
-                }
+                style={styles.passwordInput}
                 placeholder="Enter Your Password"
                 placeholderTextColor="#B7B1B1"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry={
-                  !showPassword
-                }
+                secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 autoCorrect={false}
               />
 
               <TouchableOpacity
                 style={styles.eyeButton}
-                onPress={() =>
-                  setShowPassword(
-                    !showPassword
-                  )
-                }
+                onPress={() => setShowPassword(!showPassword)}
               >
-                <Text
-                  style={styles.eyeText}
-                >
-                  {showPassword
-                    ? "👁️"
-                    : "👁️‍🗨️"}
-                </Text>
+                <Text style={styles.eyeText}>{showPassword ? "👁️" : "👁️‍🗨️"}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -314,46 +237,26 @@ export default function RegisterScreen({ navigation }) {
           <TouchableOpacity
             style={[
               styles.registerButton,
-              isLoading &&
-                styles.registerButtonDisabled,
+              isLoading && styles.registerButtonDisabled,
             ]}
             onPress={handleRegister}
             disabled={isLoading}
             activeOpacity={0.8}
           >
-            <Text
-              style={
-                styles.registerButtonText
-              }
-            >
-              {isLoading
-                ? "Creating Account..."
-                : "Create Account"}
+              <GradientBackground style={styles.headerBackground} />
+            <Text style={styles.registerButtonText}>
+              {isLoading ? "Creating Account..." : "Create Account"}
             </Text>
           </TouchableOpacity>
 
           {/* Login */}
           <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              Already have an Account?
-            </Text>
+            <Text style={styles.footerText}>Already have an Account?</Text>
 
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate(
-                  "Login"
-                )
-              }
-            >
-              <Text
-                style={styles.footerLink}
-              >
-                {" "}
-                Sign In
-              </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.footerLink}> Sign In</Text>
             </TouchableOpacity>
           </View>
-
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -376,26 +279,32 @@ const styles = StyleSheet.create({
   // =========================
 
   header: {
-    height: 200,
-    backgroundColor: "#F8A807",
-    paddingHorizontal: 24,
-    paddingTop: 104,
-    justifyContent: "flex-start",
+    backgroundColor: "#FFB20A",
+    minHeight: 201,
+    justifyContent: "flex-end",
+    paddingHorizontal: 22,
+    paddingBottom: 28,
+  },
+  headerBackground: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 
   headerTitle: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#000000",
-    lineHeight: 38,
-  },
-
-  headerSubtitle: {
-    fontSize: 18,
-    fontWeight: "400",
-    color: "#000000",
-    marginTop: 4,
-  },
+      fontSize: 25,
+      fontWeight: "800",
+      color: colors.primaryLight,
+      marginBottom: 4,
+    },
+  
+    headerSubtitle: {
+      fontSize: 15,
+      color: colors.primaryLight,
+      fontWeight: "400",
+    },
 
   // =========================
   // Form
@@ -511,6 +420,7 @@ const styles = StyleSheet.create({
     height: 45,
     backgroundColor: "#000000",
     borderRadius: 10,
+    overflow:"hidden",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 5,
@@ -531,10 +441,13 @@ const styles = StyleSheet.create({
   // =========================
 
   footer: {
+    
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 70,
+    marginTop:70,
+  
+
   },
 
   footerText: {
@@ -544,7 +457,7 @@ const styles = StyleSheet.create({
   },
 
   footerLink: {
-    color: "#F8A807",
+    color: colors.primary,
     fontSize: 14,
     fontWeight: "700",
   },

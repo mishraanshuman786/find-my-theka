@@ -1,52 +1,58 @@
 import React, { useEffect, useRef } from "react";
 import {
-  Image,
   View,
   Text,
   StyleSheet,
-  ActivityIndicator,
   Animated,
-   Easing
-} from 'react-native';
-import colors from '../constants/colors';
+  Easing,
+} from "react-native";
+
+import colors from "../constants/colors";
+import GradientBackground from "../components/GradientBackground";
 
 export default function LoadingScreen() {
-
   const progress = useRef(new Animated.Value(0)).current;
 
-useEffect(() => {
-  Animated.timing(progress, {
-    toValue: 1,
-    duration: 3000,
-    easing: Easing.linear,
-    useNativeDriver: false,
-  }).start();
-}, []);
+  useEffect(() => {
+    Animated.timing(progress, {
+      toValue: 1,
+      duration: 3000,
+      easing: Easing.linear,
+      useNativeDriver: false,
+    }).start();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <View style={styles.logoContainer}>
-       <Image
-          source={require("../../assets/splash.png")}
-          style={styles.logoImage}
-          resizeMode="cover"
-        />
+
+      {/* Background */}
+     <GradientBackground style={styles.background} />
+
+      {/* Content */}
+      <View style={styles.content}>
+        <Text style={styles.appName}>
+          FindMyTheka
+        </Text>
+
+        <Text style={styles.tagline}>
+          Locate your nearest theka, instantly
+        </Text>
+
+        <View style={styles.loader}>
+          <Animated.View
+            style={[
+              styles.loaderProgress,
+              {
+                width: progress.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ["0%", "100%"],
+                }),
+              },
+            ]}
+          />
         </View>
-      <Text style={styles.appName}>FindMyTheka</Text>
-      <Text style={styles.tagline}>Locate your nearest theka, instantly</Text>
-      <View style={styles.loader}>
-  <Animated.View
-    style={[
-      styles.loaderProgress,
-      {
-        width: progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: ["0%", "100%"],
-        }),
-      },
-    ]}
-  />
-</View>
+      </View>
+
     </View>
   );
 }
@@ -54,63 +60,49 @@ useEffect(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primaryLight,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#0F070D",
   },
-  logoContainer: {
-  width: 110,
-  height: 110,
-  borderRadius: 55,
-  overflow: "hidden",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: colors.primary,
-  marginBottom: 16,
 
-  // Android shadow
-  elevation: 6,
-
-  // iOS shadow
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 3,
+  background: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
-  shadowOpacity: 0.3,
-  shadowRadius: 6,
-},
-  logoImage: {
-  width: '100%',
-  height: '100%',
 
-},
-  // logoEmoji: {
-  //   fontSize: 50,
-  // },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+  },
+
   appName: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: colors.primary,
+    fontSize: 32,
+    fontWeight: "bold",
+    color: colors.primaryLight,
     marginBottom: 8,
   },
+
   tagline: {
     fontSize: 16,
-    color: colors.primaryDark,
+    color: colors.primaryLight,
+    textAlign: "center",
     marginBottom: 30,
   },
-  loader: {
-  width: "80%",
-  height: 6,
-  backgroundColor: "#E5E5E5",
-  borderRadius: 3,
-  overflow: "hidden",
-  alignSelf: "center",
-},
 
-loaderProgress: {
-  height: "100%",
-  backgroundColor: colors.primary, 
-  borderRadius: 3,
-},
+  loader: {
+    width: "80%",
+    height: 6,
+    backgroundColor: "rgba(255, 255, 255, 0.25)",
+    borderRadius: 3,
+    overflow: "hidden",
+  },
+
+  loaderProgress: {
+    height: "100%",
+    backgroundColor: colors.primary,
+    borderRadius: 3,
+  },
 });

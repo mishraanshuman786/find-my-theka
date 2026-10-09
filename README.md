@@ -7,3 +7,8 @@ Then run the following command:
 npx expo start --dev-client
 ```
 
+Check any error:
+```
+npx expo-doctor  
+```
+
