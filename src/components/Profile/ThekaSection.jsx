@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-
+import GradientBackground from "../GradientBackground";
 import colors from "../../constants/colors";
 import { thekasAPI } from "../../api/client";
 
@@ -78,6 +78,7 @@ const ThekaSection = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      
       <TouchableOpacity
         style={[
           styles.card,
@@ -86,6 +87,7 @@ const ThekaSection = ({ navigation }) => {
         activeOpacity={0.85}
         onPress={handlePress}
       >
+        <GradientBackground />
         <View style={styles.iconContainer}>
           <Ionicons
             name={hasThekas ? "storefront-outline" : "add-circle-outline"}
@@ -148,6 +150,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     borderRadius: 14,
+    overflow:"hidden",
     gap: 12,
   },
   myThekasCard: {
@@ -155,6 +158,7 @@ const styles = StyleSheet.create({
   },
   addThekaCard: {
     backgroundColor: colors.primaryDark,
+    
   },
   iconContainer: {
     width: 52,

@@ -10,7 +10,7 @@ import {
   Alert,
   Dimensions,
   Modal,
-  SafeAreaView,
+
 } from "react-native";
 import BottomLocationsSheet from "../components/BottomLocationsSheet";
 import MapView, { Marker, Callout } from "react-native-maps";

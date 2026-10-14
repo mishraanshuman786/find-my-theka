@@ -26,6 +26,7 @@ const initialForm = {
   gst_number: "",
   aadhaar_number: "",
   license_number: "",
+  license_expiry_date: "",
   address: "",
   city: "",
   state: "",
@@ -86,19 +87,20 @@ export default function ThekaRegistrationScreen({ navigation }) {
     setLoading(true);
 
     try {
-      const payload = {
-        name: form.name.trim(),
-        contactPhone: form.contact_phone.trim(),
-        gstNumber: form.gst_number.trim().toUpperCase(),
-        aadhaarNumber: form.aadhaar_number.trim(),
-        licenseNumber: form.license_number.trim(),
-        address: form.address.trim(),
-        city: form.city.trim(),
-        state: form.state.trim(),
-        pincode: form.pincode.trim(),
-        latitude: Number(form.latitude),
-        longitude: Number(form.longitude),
-      };
+     const payload = {
+  name: form.name.trim(),
+  contactPhone: form.contact_phone.trim(),
+  gstNumber: form.gst_number.trim().toUpperCase(),
+  aadhaarNumber: form.aadhaar_number.trim(),
+  licenseNumber: form.license_number.trim(),
+  licenseExpiryDate: form.license_expiry_date.trim(),
+  address: form.address.trim(),
+  city: form.city.trim(),
+  state: form.state.trim(),
+  pincode: form.pincode.trim(),
+  latitude: Number(form.latitude),
+  longitude: Number(form.longitude),
+};
 
       const response = await thekasAPI.register(payload);
       const result = response.data;
@@ -203,7 +205,6 @@ export default function ThekaRegistrationScreen({ navigation }) {
 
               <Text style={styles.headerTitle}>Registration Submitted!</Text>
 
-              
               <View style={styles.successBadge}>
                 <Ionicons name="time-outline" size={15} color="#FFFFFF" />
                 <Text style={styles.successBadgeText}>Pending Review</Text>
@@ -371,6 +372,15 @@ export default function ThekaRegistrationScreen({ navigation }) {
                 },
               )}
 
+              {renderInput(
+                "LICENSE EXPIRY DATE",
+                "license_expiry_date",
+                "YYYY-MM-DD (e.g. 2027-03-31)",
+                {
+                  maxLength: 10,
+                },
+              )}
+
               <Text style={styles.sectionTitle}>SHOP ADDRESS</Text>
 
               {renderInput(
@@ -473,6 +483,9 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "800",
     marginBottom: 7,
+  },
+  headerSubtitle: {
+    color: colors.primaryLight,
   },
   progressTrack: {
     flexDirection: "row",

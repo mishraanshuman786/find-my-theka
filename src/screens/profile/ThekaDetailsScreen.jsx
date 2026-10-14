@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import colors from "../../constants/colors";
 import { thekasAPI } from "../../api/client";
+import GradientBackground from "../../components/GradientBackground";
 
 export default function ThekaDetailsScreen({ route, navigation }) {
   const { thekaId } = route.params || {};
@@ -135,6 +136,7 @@ export default function ThekaDetailsScreen({ route, navigation }) {
     >
       {/* Theka header */}
       <View style={styles.heroCard}>
+        <GradientBackground />
         <View style={styles.heroIcon}>
           <Ionicons
             name="storefront"
@@ -161,9 +163,7 @@ export default function ThekaDetailsScreen({ route, navigation }) {
           <Text style={styles.statusText}>{status}</Text>
         </View>
 
-        <Text style={styles.heroSubtitle}>
-          Theka Registration Details
-        </Text>
+       
       </View>
 
       {/* Contact and address */}
@@ -301,6 +301,7 @@ const styles = StyleSheet.create({
   },
   heroCard: {
     alignItems: "center",
+    overflow:"hidden",
     padding: 24,
     borderRadius: 16,
     backgroundColor: colors.primary,
@@ -350,12 +351,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 12,
   },
-  heroSubtitle: {
-    marginTop: 10,
-    color: colors.primaryLight,
-    opacity: 0.85,
-    fontSize: 13,
-  },
+
   section: {
     padding: 16,
     borderRadius: 14,

@@ -311,17 +311,62 @@ export const thekasAPI = {
   },
 };
 
+
+/**
+ * ADMIN API
+ * All requests use the existing Axios instance and JWT interceptor.
+ *
+ * Assumes the backend router is mounted at /api/v1/admin.
+ */
+export const adminAPI = {
+  getStats: () => api.get("/admin/dashboard/stats"),
+
+  getThekas: (params = {}) =>
+    api.get("/admin/thekas", {
+      params: {
+        page: 1,
+        limit: 20,
+        ...params,
+      },
+    }),
+
+  getThekaById: (id) =>
+    api.get(`/admin/thekas/${id}`),
+
+  approveTheka: (id) =>
+    api.patch(`/admin/thekas/${id}/approve`),
+
+  rejectTheka: (id, data = {}) =>
+    api.patch(`/admin/thekas/${id}/reject`, data),
+
+  deleteExpiredTheka: (id) =>
+    api.delete(`/admin/thekas/${id}`),
+
+  getUsers: (params = {}) =>
+    api.get("/admin/users", {
+      params: {
+        page: 1,
+        limit: 20,
+        ...params,
+      },
+    }),
+
+  getUserById: (id) =>
+    api.get(`/admin/users/${id}`),
+};
+
+
 // ========================================
 // HEALTH CHECK
 // ========================================
 
 export const healthCheck = async () => {
-  console.log("❤️ HEALTH CHECK");
+  console.log("HEALTH CHECK");
 
   try {
     const response = await api.get("/health");
 
-    console.log("✅ HEALTH CHECK SUCCESS");
+    console.log("HEALTH CHECK SUCCESS");
     console.log("Response:", response.data);
 
     return response;
