@@ -12,6 +12,7 @@ import AdminStack from "./stack/AdminStack";
 import MainTabs from "./MainTab";
 import LoadingScreen from "../screens/LoadingScreen";
 
+
 const AppNavigator = () => {
   const { user, isAuthenticated, loading } = useAuth();
   const [splashFinished, setSplashFinished] = useState(false);
@@ -25,11 +26,7 @@ const AppNavigator = () => {
   }, []);
 
   if (loading || !splashFinished) {
-    return (
-      <SafeAreaProvider>
-        <LoadingScreen />
-      </SafeAreaProvider>
-    );
+    return <LoadingScreen />;
   }
 
   const roles = Array.isArray(user?.roles) ? user.roles : [];
@@ -39,7 +36,7 @@ const AppNavigator = () => {
     roles.some((role) => String(role).toUpperCase() === "ADMIN");
 
   return (
-    <SafeAreaProvider>
+    <>
       <StatusBar
         style="light"
         backgroundColor={colors.primary}
@@ -55,8 +52,9 @@ const AppNavigator = () => {
           <MainTabs />
         )}
       </NavigationContainer>
-    </SafeAreaProvider>
+    </>
   );
 };
+
 
 export default AppNavigator;

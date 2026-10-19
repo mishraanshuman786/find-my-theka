@@ -1,14 +1,16 @@
 import React from "react";
-import {StyleSheet, View} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import RadialGradient from "react-native-radial-gradient";
+
 import colors from "../constants/colors";
 import HomeStack from "./stack/HomeStack";
 import HistoryStack from "./stack/HistoryStack";
 import ProfileStack from "./stack/ProfileStack";
 
-const Tab=createBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const BottomTabBackground = () => {
   const gradientColors = colors.primaryGradient.map(
@@ -32,8 +34,12 @@ const BottomTabBackground = () => {
   );
 };
 
-
 const MainTabs = () => {
+  const insets = useSafeAreaInsets();
+
+  const baseTabHeight = 68;
+  const bottomInset = insets.bottom;
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -49,34 +55,31 @@ const MainTabs = () => {
         },
 
         tabBarStyle: {
-          height: 68,
+          height: baseTabHeight + bottomInset,
           paddingTop: 8,
-          paddingBottom: 8,
+          paddingBottom: Math.max(bottomInset, 8),
+
           backgroundColor: "transparent",
           borderTopWidth: 0,
           elevation: 0,
+
           position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
         },
 
-        tabBarBackground: () => (
-          <BottomTabBackground />
-        ),
+        tabBarBackground: () => <BottomTabBackground />,
 
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
           if (route.name === "HomeTab") {
-            iconName = focused
-              ? "home"
-              : "home-outline";
+            iconName = focused ? "home" : "home-outline";
           } else if (route.name === "HistoryTab") {
-            iconName = focused
-              ? "time"
-              : "time-outline";
+            iconName = focused ? "time" : "time-outline";
           } else if (route.name === "ProfileTab") {
-            iconName = focused
-              ? "person"
-              : "person-outline";
+            iconName = focused ? "person" : "person-outline";
           }
 
           return (
@@ -92,25 +95,19 @@ const MainTabs = () => {
       <Tab.Screen
         name="HomeTab"
         component={HomeStack}
-        options={{
-          title: "Home",
-        }}
+        options={{ title: "Home" }}
       />
 
       <Tab.Screen
         name="HistoryTab"
         component={HistoryStack}
-        options={{
-          title: "History",
-        }}
+        options={{ title: "History" }}
       />
 
       <Tab.Screen
         name="ProfileTab"
         component={ProfileStack}
-        options={{
-          title: "Profile",
-        }}
+        options={{ title: "Profile" }}
       />
     </Tab.Navigator>
   );

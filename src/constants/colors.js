@@ -28,4 +28,27 @@ export default {
   // Border colors
   border: '#E2D8C7',
   borderDark: '#B8AA93',
+
+    admin: {
+    primary: "#3B0C1B",
+    accent: "#F20A75",
+    background: "#FFFFFF",
+    surface: "#FAF7F8",
+    border: "#EDE4E7",
+    text: "#191416",
+    muted: "#89818A",
+    green: "#279F47",
+    orange: "#F28C00",
+    red: "#F5222D",
+    headerLabel: "#54162D",
+    headerSubtitle: "#D4C2C9",
+    logoutBorder: "#805466",
+    tabBackground: "#F0E9EC",
+    activeTab: "#211A1D",
+    approvedBackground: "#E3F7E9",
+    expiredBackground: "#FFE5E6",
+    pendingBackground: "#FFF0DC",
+    roleBackground: "#F3E5F5",
+    roleText: "#7B1FA2",
+  },
 };

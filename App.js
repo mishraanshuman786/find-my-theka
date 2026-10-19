@@ -1,4 +1,5 @@
 import "react-native-gesture-handler";
+import "react-native-get-random-values";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {auth} from "./src/config/firebase";
 import { AuthProvider } from "./src/context/AuthContext";

@@ -286,13 +286,14 @@ export const placesAPI = {
 // THEKAS API
 // ========================================
 
+
 export const thekasAPI = {
   // Register a new Theka
-  register: async (data) => {
-    console.log("🏪 REGISTER THEKA");
+  createTheka: async (data, config = {}) => {
+    console.log("REGISTER THEKA");
     console.log("Data:", data);
 
-    return api.post("/thekas/", data);
+    return api.post("/thekas/", data, config);
   },
 
   // Get all Thekas belonging to the logged-in user
@@ -310,6 +311,24 @@ export const thekasAPI = {
     return api.get(`/thekas/${id}`);
   },
 };
+
+
+
+// gst validation api
+export const gstAPI = {
+  verifyGstin: (gstin) =>
+    api.post("/gst/verify", {
+      gstin: gstin.trim().toUpperCase(),
+    }),
+};
+
+// payment api
+export const paymentAPI = {
+  verifyCheckoutPayment: async (payload) => {
+    return api.post("/payments/verify", payload);
+  },
+};
+
 
 
 /**

@@ -12,7 +12,10 @@ import {
   Modal,
 
 } from "react-native";
-import BottomLocationsSheet from "../components/BottomLocationsSheet";
+import { Ionicons } from "@expo/vector-icons";
+import { Pressable } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
 import MapView, { Marker, Callout } from "react-native-maps";
 import * as Location from "expo-location";
 import { useAuth } from "../context/AuthContext";
@@ -22,6 +25,93 @@ import colors from "../constants/colors";
 const { width, height } = Dimensions.get("window");
 const DEBUG_LAT = 25.4358;
 const DEBUG_LNG = 82.8534;
+
+function NearbyPlacesSlider({
+  places,
+  searching,
+  onPlacePress,
+  onRetry,
+}) {
+  const tabBarHeight = useBottomTabBarHeight();
+
+  if (!searching && places.length === 0) {
+    return null;
+  }
+
+  return (
+    <View
+      style={[
+        styles.sliderContainer,
+        { bottom: tabBarHeight + 10 },
+      ]}
+    >
+      {/* <View style={styles.sliderHeader}>
+        <View>
+          <Text style={styles.sliderTitle}>Nearby Thekas</Text>
+          <Text style={styles.sliderSubtitle}>
+            {searching
+              ? "Finding nearby shops..."
+              : `${places.length} shops found`}
+          </Text>
+        </View>
+
+        {searching && (
+          <ActivityIndicator color={colors.primary} />
+        )}
+      </View> */}
+
+      {places.length > 0 && (
+        <FlatList
+          horizontal
+          data={places}
+          keyExtractor={(item, index) =>
+            String(item.id ?? item.placeId ?? index)
+          }
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.sliderList}
+          renderItem={({ item }) => (
+            <Pressable
+              style={styles.placeCard}
+              onPress={() => onPlacePress(item)}
+            >
+              <View style={styles.placeIcon}>
+                <Ionicons
+                  name="storefront"
+                  size={25}
+                  color={colors.primary}
+                />
+              </View>
+
+              <View style={styles.placeInfo}>
+                <Text style={styles.placeName} numberOfLines={1}>
+                  {item.name || "Liquor Shop"}
+                </Text>
+
+                <Text style={styles.placeAddress} numberOfLines={2}>
+                  {item.address || "Address unavailable"}
+                </Text>
+
+                <Text style={styles.placeAction}>
+                  View details →
+                </Text>
+              </View>
+            </Pressable>
+          )}
+        />
+      )}
+
+      {!searching && places.length === 0 && (
+        <Pressable onPress={onRetry}>
+          <Text style={styles.placeAction}>
+            No shops found. Tap to retry.
+          </Text>
+        </Pressable>
+      )}
+    </View>
+  );
+}
+
+
 
 export default function HomeScreen({ navigation }) {
   const { user, logout } = useAuth();
@@ -35,14 +125,7 @@ export default function HomeScreen({ navigation }) {
   const [markersSettled, setMarkersSettled] = useState(false); // NEW
 
   useEffect(() => {
-    // used for location change
-    // setLocation({
-    //   latitude: DEBUG_LAT,
-    //   longitude: DEBUG_LNG,
-    //   latitudeDelta: 0.02,
-    //   longitudeDelta: 0.02,
-    // });
-    // searchNearby(DEBUG_LAT, DEBUG_LNG);
+  
 
     requestLocationPermission();
   }, []);
@@ -133,6 +216,8 @@ export default function HomeScreen({ navigation }) {
         const nearbyPlaces = result.data?.places || [];
         console.log("First place object:", JSON.stringify(nearbyPlaces[0], null, 2));
         setPlaces(nearbyPlaces);
+
+     
 
         if (nearbyPlaces.length === 0) {
           Alert.alert(
@@ -282,15 +367,13 @@ export default function HomeScreen({ navigation }) {
         ))}
       </View> */}
 
-      {/* Bottom Sheet - Places List */}
-      <BottomLocationsSheet
-        places={places}
-        searching={searching}
-        showPlaceList={showPlaceList}
-        onToggle={() => setShowPlaceList(!showPlaceList)}
-        onPlacePress={handlePlacePress}
-        onRetry={getCurrentLocation}
-      />
+      {/* NearbyPlacesSlider - Places List */}
+     <NearbyPlacesSlider
+  places={places}
+  searching={searching}
+  onPlacePress={handlePlacePress}
+  onRetry={getCurrentLocation}
+/>
     </View>
   );
 }
@@ -521,4 +604,73 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26, // smaller than the 40px container so it never touches the border/clip edge
   },
+  // ================================================
+  
+sliderContainer: {
+  position: "absolute",
+  left: 0,
+  right: 0,
+  paddingTop: 12,
+  paddingBottom: 10,
+
+  zIndex: 20,
+},
+
+
+sliderList: {
+  paddingHorizontal: 12,
+  gap: 10,
+},
+
+placeCard: {
+  width: 245,
+  minHeight: 112,
+  flexDirection: "row",
+  alignItems: "center",
+  padding: 12,
+  borderRadius: 16,
+  backgroundColor: "#FFFFFF",
+  borderWidth: 1,
+  borderColor: "#EEEEEE",
+  elevation: 3,
+  marginBlock:4,
+  shadowColor: "#000000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.08,
+  shadowRadius: 4,
+},
+
+placeIcon: {
+  width: 44,
+  height: 44,
+  borderRadius: 22,
+  backgroundColor: "#F8E9EC",
+  alignItems: "center",
+  justifyContent: "center",
+  marginRight: 10,
+},
+
+placeInfo: {
+  flex: 1,
+},
+
+placeName: {
+  fontSize: 14,
+  fontWeight: "700",
+  color: colors.text,
+},
+
+placeAddress: {
+  fontSize: 11,
+  color: colors.textSecondary,
+  marginTop: 4,
+},
+
+placeAction: {
+  fontSize: 12,
+  fontWeight: "600",
+  color: colors.primary,
+  marginTop: 6,
+},
+
 });
