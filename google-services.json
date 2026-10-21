@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1032768433679-p8iop670aso1j14spgtjid8krl39oui8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.findmytheka.app",
+            "certificate_hash": "6f38be15c57c16b5e5dfbc5f8bbfbb42d601fe80"
+          }
+        },
+        {
           "client_id": "1032768433679-5c1j3qdv1uvspgijs9tl95mv9o78iche.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -20,6 +20,7 @@ import {
   thekaStep1Schema,
   thekaStep2Schema,
 } from "../../validation/ThekaValidation";
+import GradientBackground from "../../components/GradientBackground";
 
 const initialForm = {
   name: "",
@@ -368,6 +369,7 @@ const registrationKey = useRef(null);
 
   const renderHeader = () => (
     <View style={styles.header}>
+      <GradientBackground />
       {" "}
       <Text style={styles.headerTitle}>Theka Registration</Text>{" "}
       <Text style={styles.headerSubtitle}>
@@ -397,6 +399,7 @@ const registrationKey = useRef(null);
         >
           {/* Gradient Success Header */}
           <View style={styles.header}>
+            <GradientBackground />
             <View style={styles.successHeader}>
               <View style={styles.successIconCircle}>
                 <Ionicons name="checkmark" size={42} color="#FFFFFF" />
