@@ -262,15 +262,15 @@ export const authAPI = {
 
 export const placesAPI = {
   getNearby: async (params = {}) => {
-    console.log("📍 GET NEARBY PLACES");
-    console.log("📍 Params:", params);
+    console.log("GET NEARBY PLACES");
+    console.log("Params:", params);
 
     return api.get("/places/nearby", { params });
   },
 
   search: async (data) => {
-    console.log("🔎 SEARCH PLACES");
-    console.log("🔎 Data:", data);
+    console.log("SEARCH PLACES");
+    console.log("Data:", data);
 
     return api.post("/places/search", data);
   },
@@ -288,6 +288,22 @@ export const placesAPI = {
 
 
 export const thekasAPI = {
+
+  
+  // Get combined nearby thekas from our database and Google Places
+  getNearbyCombined: async (params = {}) => {
+    console.log("GET COMBINED NEARBY THEKAS");
+    console.log("Params:", params);
+
+    return api.get("/thekas/nearby/combined", {
+      params: {
+        radius: 5000,
+        limit: 20,
+        ...params,
+      },
+    });
+  },
+
   // Register a new Theka
   createTheka: async (data, config = {}) => {
     console.log("REGISTER THEKA");
