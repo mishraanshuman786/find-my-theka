@@ -4,6 +4,7 @@ export default {
   primaryLight: '#ffffff',
   primaryDark:"#000000",
   primaryGray:"#B4A8A8",
+  lightGray:"#f6f2f2",
   primaryGradient:[
     { offset: "0%", color: "#5A1220" },
     { offset: "23%", color: "#4A0F19" },

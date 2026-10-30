@@ -261,35 +261,25 @@ export const authAPI = {
 // ========================================
 
 export const placesAPI = {
-  getNearby: async (params = {}) => {
-    console.log("GET NEARBY PLACES");
-    console.log("Params:", params);
+  // Nearby places
+  getNearby: (params = {}) => api.get("/places/nearby", { params }),
 
-    return api.get("/places/nearby", { params });
-  },
+  // Saved locations
+  saveLocation: (data) => api.post("/places/saved-locations", data),
 
-  search: async (data) => {
-    console.log("SEARCH PLACES");
-    console.log("Data:", data);
+  getSavedLocations: () => api.get("/places/saved-locations"),
 
-    return api.post("/places/search", data);
-  },
+  renameSavedLocation: (id, payload) =>
+    api.patch(`/places/saved-locations/${id}`, payload),
 
-  getHistory: async () => {
-    console.log("📜 GET HISTORY");
-
-    return api.get("/places/history");
-  },
+  deleteSavedLocation: (id) => api.delete(`/places/saved-locations/${id}`),
 };
 
 // ========================================
 // THEKAS API
 // ========================================
 
-
 export const thekasAPI = {
-
-  
   // Get combined nearby thekas from our database and Google Places
   getNearbyCombined: async (params = {}) => {
     console.log("GET COMBINED NEARBY THEKAS");
@@ -328,8 +318,6 @@ export const thekasAPI = {
   },
 };
 
-
-
 // gst validation api
 export const gstAPI = {
   verifyGstin: (gstin) =>
@@ -344,8 +332,6 @@ export const paymentAPI = {
     return api.post("/payments/verify", payload);
   },
 };
-
-
 
 /**
  * ADMIN API
@@ -365,17 +351,13 @@ export const adminAPI = {
       },
     }),
 
-  getThekaById: (id) =>
-    api.get(`/admin/thekas/${id}`),
+  getThekaById: (id) => api.get(`/admin/thekas/${id}`),
 
-  approveTheka: (id) =>
-    api.patch(`/admin/thekas/${id}/approve`),
+  approveTheka: (id) => api.patch(`/admin/thekas/${id}/approve`),
 
-  rejectTheka: (id, data = {}) =>
-    api.patch(`/admin/thekas/${id}/reject`, data),
+  rejectTheka: (id, data = {}) => api.patch(`/admin/thekas/${id}/reject`, data),
 
-  deleteExpiredTheka: (id) =>
-    api.delete(`/admin/thekas/${id}`),
+  deleteExpiredTheka: (id) => api.delete(`/admin/thekas/${id}`),
 
   getUsers: (params = {}) =>
     api.get("/admin/users", {
@@ -386,10 +368,8 @@ export const adminAPI = {
       },
     }),
 
-  getUserById: (id) =>
-    api.get(`/admin/users/${id}`),
+  getUserById: (id) => api.get(`/admin/users/${id}`),
 };
-
 
 // ========================================
 // HEALTH CHECK
