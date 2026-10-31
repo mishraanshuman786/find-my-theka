@@ -28,15 +28,6 @@ api.interceptors.request.use(
   (config) => {
     const token = global.authToken;
 
-    console.log("\n========================================");
-    console.log("📤 API REQUEST");
-    console.log("Method:", config.method?.toUpperCase());
-    console.log("URL:", `${config.baseURL}${config.url}`);
-    console.log("Params:", config.params || "None");
-    console.log("Body:", config.data || "None");
-    console.log("Has Auth Token:", !!token);
-    console.log("========================================");
-
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -57,13 +48,6 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    console.log("\n========================================");
-    console.log("📥 API SUCCESS");
-    console.log("Status:", response.status);
-    console.log("URL:", `${response.config.baseURL}${response.config.url}`);
-    console.log("Response:", response.data);
-    console.log("========================================\n");
-
     return response;
   },
 
@@ -113,21 +97,9 @@ api.interceptors.response.use(
 
 export const authAPI = {
   register: async (data) => {
-    console.log("\n");
-    console.log("🟢 ================================");
-    console.log("🟢 REGISTER STARTED");
-    console.log("🟢 Data:", data);
-    console.log("🟢 ================================");
 
     try {
       const response = await api.post("/auth/register", data);
-
-      console.log("\n");
-      console.log("✅ ================================");
-      console.log("✅ REGISTER SUCCESS");
-      console.log("✅ Status:", response.status);
-      console.log("✅ Response:", response.data);
-      console.log("✅ ================================\n");
 
       return response;
     } catch (error) {
@@ -151,38 +123,14 @@ export const authAPI = {
   },
 
   login: async (data) => {
-    console.log("\n");
-    console.log("🔵 ================================");
-    console.log("🔵 LOGIN STARTED");
-    console.log("🔵 Data:", data);
-    console.log("🔵 ================================");
+  
 
     try {
       const response = await api.post("/auth/login", data);
 
-      console.log("\n");
-      console.log("✅ ================================");
-      console.log("✅ LOGIN SUCCESS");
-      console.log("✅ Status:", response.status);
-      console.log("✅ Response:", response.data);
-      console.log("✅ ================================\n");
 
       return response;
     } catch (error) {
-      console.error("\n");
-      console.error("🔴 ================================");
-      console.error("🔴 LOGIN FAILED");
-
-      if (error.response) {
-        console.error("🔴 Status:", error.response.status);
-        console.error("🔴 Server Response:", error.response.data);
-      } else if (error.request) {
-        console.error("🔴 Server did not respond");
-      } else {
-        console.error("🔴 Error:", error.message);
-      }
-
-      console.error("🔴 ================================\n");
 
       throw error;
     }
@@ -190,39 +138,17 @@ export const authAPI = {
 
   // Firebase Google / Phone authentication
   firebaseLogin: async (idToken) => {
-    console.log("\n");
-    console.log("🔥 ================================");
-    console.log("🔥 FIREBASE LOGIN STARTED");
-    console.log("🔥 ================================");
+   
 
     try {
       const response = await api.post("/auth/firebase", {
         idToken,
       });
 
-      console.log("\n");
-      console.log("✅ ================================");
-      console.log("✅ FIREBASE LOGIN SUCCESS");
-      console.log("✅ Status:", response.status);
-      console.log("✅ User:", response.data?.data?.user);
-      console.log("✅ ================================\n");
+     
 
       return response;
     } catch (error) {
-      console.error("\n");
-      console.error("🔴 ================================");
-      console.error("🔴 FIREBASE LOGIN FAILED");
-
-      if (error.response) {
-        console.error("🔴 Status:", error.response.status);
-        console.error("🔴 Server Response:", error.response.data);
-      } else if (error.request) {
-        console.error("🔴 Server did not respond");
-      } else {
-        console.error("🔴 Error:", error.message);
-      }
-
-      console.error("🔴 ================================\n");
 
       throw error;
     }
@@ -235,18 +161,14 @@ export const authAPI = {
   },
 
   forgotPassword: async (email) => {
-    console.log("forgot password:");
-    console.log("Email:", email);
+
 
     return api.post("/auth/forgot-password", {
       email,
     });
   },
   resetPassword: async (data) => {
-    console.log("🔑 RESET PASSWORD");
-    console.log("Email:", data.email);
-    console.log("OTP:", data.otp);
-    console.log("New Password:", data.newPassword);
+ 
 
     return api.post("/auth/reset-password", {
       email: data.email,
@@ -254,6 +176,15 @@ export const authAPI = {
       newPassword: data.newPassword,
     });
   },
+
+  setPassword: (newPassword) => api.post("/auth/set-password", { newPassword }),
+
+  changePassword: (data) =>
+    api.post("/auth/change-password", {
+      currentPassword: data.currentPassword,
+      newPassword: data.newPassword,
+    }),
+    updateProfile: (data) => api.patch("/auth/profile", data),
 };
 
 // ========================================
@@ -282,8 +213,7 @@ export const placesAPI = {
 export const thekasAPI = {
   // Get combined nearby thekas from our database and Google Places
   getNearbyCombined: async (params = {}) => {
-    console.log("GET COMBINED NEARBY THEKAS");
-    console.log("Params:", params);
+   
 
     return api.get("/thekas/nearby/combined", {
       params: {
@@ -296,23 +226,21 @@ export const thekasAPI = {
 
   // Register a new Theka
   createTheka: async (data, config = {}) => {
-    console.log("REGISTER THEKA");
-    console.log("Data:", data);
+    
 
     return api.post("/thekas/", data, config);
   },
 
   // Get all Thekas belonging to the logged-in user
   getMyThekas: async () => {
-    console.log("🏪 GET MY THEKAS");
+    
 
     return api.get("/thekas");
   },
 
   // Get details of a specific Theka
   getDetails: async (id) => {
-    console.log("🏪 GET THEKA DETAILS");
-    console.log("Theka ID:", id);
+   
 
     return api.get(`/thekas/${id}`);
   },

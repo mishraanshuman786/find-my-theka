@@ -60,17 +60,14 @@ export default function ProfileScreen({navigation}) {
       <ThekaSection navigation={navigation} />
 
 {/* Options List */}
-      <OptionsList navigation={navigation} />
+      <OptionsList navigation={navigation} user={user} />
 
       {/* Logout Button */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutButtonText}>Logout</Text>
       </TouchableOpacity>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Find My Theka v1.0.0</Text>
-        <Text style={styles.footerText}>Made with ❤️ in India</Text>
-      </View>
+      
     </ScrollView>
   );
 }
@@ -184,13 +181,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.primaryLight,
   },
-  footer: {
-    alignItems: "center",
-    paddingVertical: 20,
-  },
-  footerText: {
-    fontSize: 12,
-    color: colors.textLight,
-    marginBottom: 4,
-  },
+ 
 });

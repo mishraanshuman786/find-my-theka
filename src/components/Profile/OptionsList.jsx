@@ -2,20 +2,39 @@ import React from "react";
 import {
   View,
   Text,
-  FlatList,
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../../constants/colors";
 
-const OptionsList = ({ navigation }) => {
+const OptionsList = ({ navigation, user }) => {
+  const hasPassword = user?.account?.hasPassword === true;
+
   const options = [
     {
       id: "edit-profile",
       title: "Edit Profile",
-      icon: "person",
+      icon: "person-outline",
       screen: "EditProfile",
+    },
+    {
+      id: "password",
+      title: hasPassword ? "Change Password" : "Set Password",
+      icon: "lock-closed-outline",
+      screen: "PasswordManagement",
+    },
+    {
+      id: "privacy",
+      title: "Privacy Policy",
+      icon: "shield-checkmark-outline",
+      screen: "PrivacyPolicy",
+    },
+    {
+      id: "about",
+      title: "About Find My Theka",
+      icon: "information-circle-outline",
+      screen: "About",
     },
   ];
 
@@ -29,9 +48,17 @@ const OptionsList = ({ navigation }) => {
           onPress={() => navigation.navigate(option.screen)}
         >
           <View style={styles.leftContainer}>
-            <Ionicons name={option.icon} size={22} color={colors.primary} />
-            <Text style={styles.optionText}>{option.title}</Text>
+            <Ionicons
+              name={option.icon}
+              size={22}
+              color={colors.primary}
+            />
+
+            <Text style={styles.optionText}>
+              {option.title}
+            </Text>
           </View>
+
           <Ionicons
             name="chevron-forward"
             size={20}
